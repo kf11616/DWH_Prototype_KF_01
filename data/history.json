@@ -1,0 +1,471 @@
+{
+  "orphanedCapacityWeekly": [
+    {
+      "week": "2026-08-10",
+      "tib": 98
+    },
+    {
+      "week": "2026-08-17",
+      "tib": 102
+    },
+    {
+      "week": "2026-08-24",
+      "tib": 105
+    },
+    {
+      "week": "2026-08-31",
+      "tib": 110
+    },
+    {
+      "week": "2026-09-07",
+      "tib": 113
+    },
+    {
+      "week": "2026-09-14",
+      "tib": 118
+    },
+    {
+      "week": "2026-09-21",
+      "tib": 123
+    },
+    {
+      "week": "2026-09-28",
+      "tib": 128
+    }
+  ],
+  "appAvgDaily": [
+    {
+      "date": "2026-07-24",
+      "iops": 212,
+      "latency": 4.2
+    },
+    {
+      "date": "2026-07-25",
+      "iops": 240,
+      "latency": 5.1
+    },
+    {
+      "date": "2026-07-26",
+      "iops": 226,
+      "latency": 6.3
+    },
+    {
+      "date": "2026-07-27",
+      "iops": 312,
+      "latency": 12.4
+    },
+    {
+      "date": "2026-07-28",
+      "iops": 281,
+      "latency": 7.8
+    },
+    {
+      "date": "2026-07-29",
+      "iops": 256,
+      "latency": 10.6
+    },
+    {
+      "date": "2026-07-30",
+      "iops": 270,
+      "latency": 6.1
+    }
+  ],
+  "appIopsDaily": [
+    {
+      "date": "2026-07-24",
+      "Acquisition Units": 82,
+      "nitl-jump": 38,
+      "Cloud123": 30,
+      "Bryce OCI": 24,
+      "Y-Pod1": 18,
+      "AIQUM": 96,
+      "SQL": 86,
+      "Alfresco": 58,
+      "mysql": 48,
+      "SAP": 90
+    },
+    {
+      "date": "2026-07-25",
+      "Acquisition Units": 84,
+      "nitl-jump": 40,
+      "Cloud123": 31,
+      "Bryce OCI": 26,
+      "Y-Pod1": 19,
+      "AIQUM": 98,
+      "SQL": 88,
+      "Alfresco": 60,
+      "mysql": 50,
+      "SAP": 92
+    },
+    {
+      "date": "2026-07-26",
+      "Acquisition Units": 66,
+      "nitl-jump": 41,
+      "Cloud123": 29,
+      "Bryce OCI": 25,
+      "Y-Pod1": 20,
+      "AIQUM": 101,
+      "SQL": 84,
+      "Alfresco": 62,
+      "mysql": 52,
+      "SAP": 89
+    },
+    {
+      "date": "2026-07-27",
+      "Acquisition Units": 422,
+      "nitl-jump": 42,
+      "Cloud123": 33,
+      "Bryce OCI": 27,
+      "Y-Pod1": 21,
+      "AIQUM": 108,
+      "SQL": 90,
+      "Alfresco": 61,
+      "mysql": 49,
+      "SAP": 94
+    },
+    {
+      "date": "2026-07-28",
+      "Acquisition Units": 92,
+      "nitl-jump": 481,
+      "Cloud123": 32,
+      "Bryce OCI": 26,
+      "Y-Pod1": 19,
+      "AIQUM": 104,
+      "SQL": 87,
+      "Alfresco": 59,
+      "mysql": 51,
+      "SAP": 91
+    },
+    {
+      "date": "2026-07-29",
+      "Acquisition Units": 78,
+      "nitl-jump": 52,
+      "Cloud123": 30,
+      "Bryce OCI": 25,
+      "Y-Pod1": 18,
+      "AIQUM": 99,
+      "SQL": 85,
+      "Alfresco": 60,
+      "mysql": 50,
+      "SAP": 90
+    },
+    {
+      "date": "2026-07-30",
+      "Acquisition Units": 80,
+      "nitl-jump": 48,
+      "Cloud123": 31,
+      "Bryce OCI": 24,
+      "Y-Pod1": 20,
+      "AIQUM": 97,
+      "SQL": 88,
+      "Alfresco": 58,
+      "mysql": 49,
+      "SAP": 93
+    }
+  ],
+  "appLatencyDaily": [
+    {
+      "date": "2026-07-24",
+      "Acquisition Units": 10,
+      "nitl-jump": 8,
+      "Cloud123": 5,
+      "Bryce OCI": 4,
+      "Y-Pod1": 3,
+      "AIQUM": 8,
+      "SQL": 11,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 12
+    },
+    {
+      "date": "2026-07-25",
+      "Acquisition Units": 11,
+      "nitl-jump": 8,
+      "Cloud123": 5,
+      "Bryce OCI": 4,
+      "Y-Pod1": 3,
+      "AIQUM": 8,
+      "SQL": 11,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 12
+    },
+    {
+      "date": "2026-07-26",
+      "Acquisition Units": 9,
+      "nitl-jump": 7,
+      "Cloud123": 6,
+      "Bryce OCI": 4,
+      "Y-Pod1": 3,
+      "AIQUM": 9,
+      "SQL": 10,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 11
+    },
+    {
+      "date": "2026-07-27",
+      "Acquisition Units": 21,
+      "nitl-jump": 8,
+      "Cloud123": 5,
+      "Bryce OCI": 5,
+      "Y-Pod1": 3,
+      "AIQUM": 9,
+      "SQL": 12,
+      "Alfresco": 8,
+      "mysql": 10,
+      "SAP": 12
+    },
+    {
+      "date": "2026-07-28",
+      "Acquisition Units": 95,
+      "nitl-jump": 9,
+      "Cloud123": 6,
+      "Bryce OCI": 4,
+      "Y-Pod1": 4,
+      "AIQUM": 8,
+      "SQL": 11,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 12
+    },
+    {
+      "date": "2026-07-29",
+      "Acquisition Units": 16,
+      "nitl-jump": 87,
+      "Cloud123": 5,
+      "Bryce OCI": 4,
+      "Y-Pod1": 3,
+      "AIQUM": 8,
+      "SQL": 11,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 12
+    },
+    {
+      "date": "2026-07-30",
+      "Acquisition Units": 12,
+      "nitl-jump": 13,
+      "Cloud123": 5,
+      "Bryce OCI": 4,
+      "Y-Pod1": 3,
+      "AIQUM": 8,
+      "SQL": 10,
+      "Alfresco": 7,
+      "mysql": 9,
+      "SAP": 11
+    }
+  ],
+  "fleetDaily": [
+    {
+      "date": "2026-09-07",
+      "usedTiB": 5539.7,
+      "iops": 789642,
+      "latency": 3.44,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-08",
+      "usedTiB": 5555.1,
+      "iops": 814301,
+      "latency": 3.24,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-09",
+      "usedTiB": 5570.4,
+      "iops": 777538,
+      "latency": 3.17,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-10",
+      "usedTiB": 5583.5,
+      "iops": 760220,
+      "latency": 3.43,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-11",
+      "usedTiB": 5593.7,
+      "iops": 811220,
+      "latency": 3.3,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-12",
+      "usedTiB": 5609.4,
+      "iops": 766195,
+      "latency": 3.11,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-13",
+      "usedTiB": 5623.7,
+      "iops": 776425,
+      "latency": 3.27,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-14",
+      "usedTiB": 5642.6,
+      "iops": 785148,
+      "latency": 3.31,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-15",
+      "usedTiB": 5650.3,
+      "iops": 814648,
+      "latency": 3.28,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-16",
+      "usedTiB": 5663.5,
+      "iops": 769642,
+      "latency": 3.34,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-17",
+      "usedTiB": 5685.1,
+      "iops": 796986,
+      "latency": 3.09,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-18",
+      "usedTiB": 5697.7,
+      "iops": 790104,
+      "latency": 3.22,
+      "critical": 1
+    },
+    {
+      "date": "2026-09-19",
+      "usedTiB": 5713.9,
+      "iops": 810396,
+      "latency": 3.35,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-20",
+      "usedTiB": 5727.2,
+      "iops": 811057,
+      "latency": 3.27,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-21",
+      "usedTiB": 5735.7,
+      "iops": 772573,
+      "latency": 3.18,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-22",
+      "usedTiB": 5756.3,
+      "iops": 814159,
+      "latency": 3.31,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-23",
+      "usedTiB": 5767.7,
+      "iops": 794338,
+      "latency": 3.11,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-24",
+      "usedTiB": 5779.3,
+      "iops": 792422,
+      "latency": 2.98,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-25",
+      "usedTiB": 5800.9,
+      "iops": 826436,
+      "latency": 3.18,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-26",
+      "usedTiB": 5811.5,
+      "iops": 782277,
+      "latency": 3.11,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-27",
+      "usedTiB": 5828.7,
+      "iops": 838788,
+      "latency": 3.25,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-28",
+      "usedTiB": 5841.4,
+      "iops": 839786,
+      "latency": 3.25,
+      "critical": 2
+    },
+    {
+      "date": "2026-09-29",
+      "usedTiB": 5853.4,
+      "iops": 830072,
+      "latency": 3.22,
+      "critical": 3
+    },
+    {
+      "date": "2026-09-30",
+      "usedTiB": 5872.1,
+      "iops": 840581,
+      "latency": 3.2,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-01",
+      "usedTiB": 5885.6,
+      "iops": 783570,
+      "latency": 3,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-02",
+      "usedTiB": 5900.2,
+      "iops": 798442,
+      "latency": 2.92,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-03",
+      "usedTiB": 5909.3,
+      "iops": 821011,
+      "latency": 2.91,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-04",
+      "usedTiB": 5925.7,
+      "iops": 820801,
+      "latency": 2.97,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-05",
+      "usedTiB": 5942.1,
+      "iops": 843623,
+      "latency": 3.13,
+      "critical": 3
+    },
+    {
+      "date": "2026-10-06",
+      "usedTiB": 5955,
+      "iops": 821296,
+      "latency": 2.98,
+      "critical": 3
+    }
+  ]
+}

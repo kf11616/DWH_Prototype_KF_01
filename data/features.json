@@ -1,0 +1,134 @@
+{
+  "featureSummary": {
+    "title": "Feature summary",
+    "description": "What’s new beyond the Cursor baseline. The two original reports stay as the PM reference; the new work lives in Storage Health & Capacity Outlook and in AI-assisted editing.",
+    "groups": [
+      {
+        "id": "widgets",
+        "title": "Widget library",
+        "scope": "Storage Health only",
+        "items": [
+          {
+            "name": "KPI sparkline + change",
+            "desc": "Each summary card shows a 30-day trend line and a ▲▼ change vs 30 days ago, colored green or red by whether that direction is good.",
+            "demo": "Point at Avg latency (down = green) vs Critical arrays (up = red)."
+          },
+          {
+            "name": "Capacity gauge",
+            "desc": "Semicircle gauge of used vs raw capacity with warning (75%) and critical (90%) ticks. Fill turns orange or red past each one.",
+            "demo": "Fleet capacity utilization card."
+          },
+          {
+            "name": "Donut with total",
+            "desc": "Pie variant with the total in the center. Same hover, labels and toggleable legend as the original pie.",
+            "demo": "Used capacity by data center."
+          },
+          {
+            "name": "Stacked status bar",
+            "desc": "Counts split into OK / Warning / Critical with alert chart colors. Legend shows counts and toggles each status.",
+            "demo": "Array health by data center — toggle Warning off."
+          },
+          {
+            "name": "Bullet bars",
+            "desc": "Top-N values against warning and critical bands, so “how close to the limit” reads at a glance.",
+            "demo": "Most constrained arrays."
+          },
+          {
+            "name": "Area chart",
+            "desc": "Line chart with a filled area for growth stories.",
+            "demo": "Fleet used capacity."
+          },
+          {
+            "name": "Card sizing",
+            "desc": "Cards span 1, 2 or full width. Spans shrink automatically when the drawer narrows the canvas.",
+            "demo": "Ask the assistant: “Make the capacity trend full width.”"
+          },
+          {
+            "name": "Table sparklines",
+            "desc": "14-day trend drawn inside each table row.",
+            "demo": "IOPS, 14 days column."
+          },
+          {
+            "name": "Threshold & status pills",
+            "desc": "Cells turn yellow or red past their limits (Used %, Latency, Days to full) plus a Status pill column.",
+            "demo": "Scan the table’s Used and Days to full columns."
+          }
+        ]
+      },
+      {
+        "id": "xf",
+        "title": "Cross-filtering",
+        "scope": "Storage Health only",
+        "items": [
+          {
+            "name": "Click to filter",
+            "desc": "Click a donut slice, stacked segment or bullet row to filter the whole report to that value. One filter at a time; click again to clear.",
+            "demo": "Click San Jose in the donut."
+          },
+          {
+            "name": "Context stays visible",
+            "desc": "The clicked chart keeps all its data with the selection highlighted and the rest dimmed.",
+            "demo": "Watch the donut after clicking."
+          },
+          {
+            "name": "Honest history",
+            "desc": "History-based charts and KPI trends are not filtered; they’re marked “Not filtered · fleet history” or hidden.",
+            "demo": "Point at the Fleet used capacity pill."
+          },
+          {
+            "name": "Filter bar",
+            "desc": "“Filtered by [Field: value ×]” and Clear filter under the header. View-only — never counted as an edit.",
+            "demo": "Clear the filter from the bar."
+          }
+        ]
+      },
+      {
+        "id": "edit",
+        "title": "AI-assisted editing",
+        "scope": "All reports",
+        "items": [
+          {
+            "name": "Right-docked drawer",
+            "desc": "Edit opens the AI assistant as a push drawer on the right, next to the Edit button, so the report stays in view. Deliberate deviation from Cursor’s left drawer.",
+            "demo": "Click Edit; note the blue edge pulse."
+          },
+          {
+            "name": "Scripted prompts",
+            "desc": "Predictable suggested prompts per report with typed-out replies. Each applies a real change to the report.",
+            "demo": "Run any suggested prompt."
+          },
+          {
+            "name": "Highlight what changed",
+            "desc": "Only cards whose output changed flash, then keep a blue border and a “Modified” tag until Save or Cancel.",
+            "demo": "“Only show critical arrays” — note which cards light up."
+          },
+          {
+            "name": "Unsaved changes list",
+            "desc": "“N unsaved changes ▾” in the header lists every change; click one to jump to its card.",
+            "demo": "Open the list after two prompts."
+          },
+          {
+            "name": "Undo per change",
+            "desc": "Each change in the transcript has its own Undo; other changes stay.",
+            "demo": "Undo the first of two changes."
+          },
+          {
+            "name": "Show original",
+            "desc": "Switch between the saved report and your draft without losing anything.",
+            "demo": "Toggle Show original in the header."
+          },
+          {
+            "name": "Save with summary",
+            "desc": "Save report dialog lists every change, then lets you rename and describe the report.",
+            "demo": "Click Save."
+          },
+          {
+            "name": "Discard guard",
+            "desc": "Leaving with unsaved changes asks “Discard changes?” first.",
+            "demo": "Press Esc with changes pending."
+          }
+        ]
+      }
+    ]
+  }
+}

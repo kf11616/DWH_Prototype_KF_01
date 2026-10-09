@@ -1,0 +1,955 @@
+{
+  "reports": [
+    {
+      "id": "orphaned",
+      "name": "Orphaned Volumes — Reclamation List",
+      "description": "Volumes with no IO in 90+ days, with the capacity each one would return.",
+      "owner": "Kevin Key",
+      "refreshed": "2026-10-04T00:00:23",
+      "dataset": "volumes",
+      "chartColumns": 3,
+      "kpis": [
+        {
+          "label": "CANDIDATE VOLUMES",
+          "agg": "count"
+        },
+        {
+          "label": "RECLAIMABLE CAPACITY",
+          "agg": "sum",
+          "field": "capacityTiB",
+          "format": "tib0"
+        },
+        {
+          "label": "DATA CENTERS",
+          "agg": "distinct",
+          "field": "dataCenter"
+        },
+        {
+          "label": "HIGH CONFIDENCE",
+          "agg": "count",
+          "where": {
+            "confidence": "High"
+          }
+        }
+      ],
+      "charts": [
+        {
+          "type": "pie",
+          "title": "Reclaimable capacity by data center",
+          "subtitle": "TiB",
+          "groupBy": "dataCenter",
+          "sum": "capacityTiB",
+          "unit": "TiB",
+          "id": "byDc"
+        },
+        {
+          "type": "bar",
+          "title": "Candidates by time since last IO",
+          "subtitle": "Volume count",
+          "field": "daysSinceIO",
+          "buckets": [
+            {
+              "label": "90–120 days",
+              "min": 90,
+              "max": 120
+            },
+            {
+              "label": "120–180 days",
+              "min": 120,
+              "max": 180
+            },
+            {
+              "label": "180–365 days",
+              "min": 180,
+              "max": 365
+            },
+            {
+              "label": "365+ days",
+              "min": 365
+            }
+          ],
+          "ticks": [
+            0,
+            200,
+            400
+          ],
+          "format": "volumes",
+          "id": "ioAge"
+        },
+        {
+          "type": "line",
+          "title": "Reclaimable capacity over time",
+          "subtitle": "Weekly, TiB",
+          "source": "orphanedCapacityWeekly",
+          "x": "week",
+          "xFormat": "monthDay",
+          "series": [
+            {
+              "key": "tib",
+              "name": "Reclaimable capacity"
+            }
+          ],
+          "ticks": [
+            0,
+            50,
+            100,
+            150
+          ],
+          "format": "tib",
+          "id": "overTime"
+        }
+      ],
+      "table": {
+        "columns": [
+          {
+            "key": "name",
+            "label": "Volume",
+            "w": 1.6
+          },
+          {
+            "key": "array",
+            "label": "Array",
+            "w": 1.2
+          },
+          {
+            "key": "dataCenter",
+            "label": "Data center"
+          },
+          {
+            "key": "capacityTiB",
+            "label": "Capacity",
+            "format": "cap"
+          },
+          {
+            "key": "daysSinceIO",
+            "label": "Last IO",
+            "format": "days"
+          },
+          {
+            "key": "businessUnit",
+            "label": "Business unit"
+          },
+          {
+            "key": "confidence",
+            "label": "Confidence"
+          }
+        ]
+      },
+      "assistant": {
+        "prompts": [
+          {
+            "id": "host",
+            "label": "Add a column for host",
+            "match": [
+              "host"
+            ],
+            "action": {
+              "type": "addColumn",
+              "after": "array",
+              "column": {
+                "key": "host",
+                "label": "Host"
+              }
+            },
+            "reply": "Added a **Host** column next to Array, showing the host each volume was last mounted on.",
+            "summary": "Added Host column"
+          },
+          {
+            "id": "high",
+            "label": "Only show high-confidence volumes",
+            "match": [
+              "high"
+            ],
+            "action": {
+              "type": "filter",
+              "where": {
+                "confidence": "High"
+              },
+              "label": "Confidence: High"
+            },
+            "reply": "Filtered to **high-confidence** volumes: 612 of 847. The cards, the two breakdown charts and the table now count only those. The weekly trend is historical, so it stays the same.",
+            "summary": "Filtered to High confidence"
+          },
+          {
+            "id": "pieBar",
+            "label": "Change the pie chart to a bar chart",
+            "match": [
+              "pie bar",
+              "bar chart"
+            ],
+            "action": {
+              "type": "replaceChart",
+              "id": "byDc",
+              "chart": {
+                "id": "byDc",
+                "type": "bar",
+                "horizontal": true,
+                "title": "Reclaimable capacity by data center",
+                "subtitle": "TiB",
+                "groupBy": "dataCenter",
+                "sum": "capacityTiB",
+                "format": "tib",
+                "height": 220
+              }
+            },
+            "reply": "Switched **Reclaimable capacity by data center** to a bar chart, sorted largest to smallest.",
+            "summary": "Capacity by data center → bar chart"
+          },
+          {
+            "id": "noArray",
+            "label": "Remove the Array column",
+            "match": [
+              "array"
+            ],
+            "action": {
+              "type": "removeColumn",
+              "key": "array"
+            },
+            "reply": "Removed the **Array** column from the table.",
+            "summary": "Removed Array column"
+          },
+          {
+            "id": "sortCap",
+            "label": "Sort by capacity, largest first",
+            "match": [
+              "sort capacity",
+              "largest"
+            ],
+            "action": {
+              "type": "sort",
+              "key": "capacityTiB",
+              "desc": true
+            },
+            "reply": "Sorted the table by **Capacity**, largest first.",
+            "summary": "Sorted by Capacity, largest first"
+          },
+          {
+            "id": "noTrend",
+            "label": "Hide the capacity over time chart",
+            "match": [
+              "over time",
+              "trend"
+            ],
+            "action": {
+              "type": "removeChart",
+              "id": "overTime"
+            },
+            "reply": "Removed **Reclaimable capacity over time**. The other two charts widen to fill the row.",
+            "summary": "Removed capacity over time chart"
+          }
+        ]
+      }
+    },
+    {
+      "id": "app",
+      "name": "Application Resource Consumption",
+      "description": "Cost, capacity, and performance by application — where spend and latency concentrate.",
+      "owner": "Kevin Key",
+      "refreshed": "2026-10-05T00:00:23",
+      "dataset": "applications",
+      "chartColumns": 2,
+      "kpis": [
+        {
+          "label": "APPLICATION COUNT",
+          "agg": "distinct",
+          "field": "app"
+        },
+        {
+          "label": "TOTAL COST OF APPLICATIONS",
+          "agg": "sum",
+          "field": "totalCost",
+          "format": "usd"
+        },
+        {
+          "label": "TOTAL APPLICATION CAPACITY",
+          "agg": "sum",
+          "field": "provisionedGiB",
+          "format": "gib"
+        },
+        {
+          "label": "TOTAL ALLOCATED CPUS",
+          "agg": "sum",
+          "field": "cpus"
+        },
+        {
+          "label": "TOTAL ALLOCATED RAM",
+          "agg": "sum",
+          "field": "memoryGB",
+          "format": "gb"
+        }
+      ],
+      "charts": [
+        {
+          "type": "bar",
+          "horizontal": true,
+          "title": "Top annual consumer costs",
+          "subtitle": "Compute + storage, last 12 months, USD",
+          "label": "app",
+          "value": "totalCost",
+          "limit": 8,
+          "ticks": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000,
+            5000,
+            6000,
+            7000,
+            8000
+          ],
+          "tickFormat": "k",
+          "format": "usd",
+          "height": 240,
+          "id": "topCost"
+        },
+        {
+          "type": "line",
+          "title": "IOPS vs latency trends",
+          "subtitle": "Average from last 7 days",
+          "source": "appAvgDaily",
+          "x": "date",
+          "xFormat": "mmdd",
+          "series": [
+            {
+              "key": "iops",
+              "name": "Average IOPS",
+              "format": "iops"
+            },
+            {
+              "key": "latency",
+              "name": "Latency (ms)",
+              "format": "ms"
+            }
+          ],
+          "ticks": [
+            0,
+            200,
+            400
+          ],
+          "height": 115,
+          "id": "iopsLatency"
+        },
+        {
+          "type": "line",
+          "title": "IOPS trends by application",
+          "source": "appIopsDaily",
+          "x": "date",
+          "xFormat": "mmdd",
+          "series": [
+            {
+              "key": "Acquisition Units"
+            },
+            {
+              "key": "nitl-jump"
+            },
+            {
+              "key": "Cloud123"
+            },
+            {
+              "key": "Bryce OCI"
+            },
+            {
+              "key": "Y-Pod1"
+            },
+            {
+              "key": "AIQUM"
+            },
+            {
+              "key": "SQL"
+            },
+            {
+              "key": "Alfresco"
+            },
+            {
+              "key": "mysql"
+            },
+            {
+              "key": "SAP"
+            }
+          ],
+          "ticks": [
+            0,
+            200,
+            400,
+            600
+          ],
+          "format": "iops",
+          "height": 115,
+          "id": "iopsByApp"
+        },
+        {
+          "type": "line",
+          "title": "Latency trends by application",
+          "subtitle": "Milliseconds",
+          "source": "appLatencyDaily",
+          "x": "date",
+          "xFormat": "mmdd",
+          "series": [
+            {
+              "key": "Acquisition Units"
+            },
+            {
+              "key": "nitl-jump"
+            },
+            {
+              "key": "Cloud123"
+            },
+            {
+              "key": "Bryce OCI"
+            },
+            {
+              "key": "Y-Pod1"
+            },
+            {
+              "key": "AIQUM"
+            },
+            {
+              "key": "SQL"
+            },
+            {
+              "key": "Alfresco"
+            },
+            {
+              "key": "mysql"
+            },
+            {
+              "key": "SAP"
+            }
+          ],
+          "ticks": [
+            0,
+            50,
+            100
+          ],
+          "format": "ms",
+          "height": 115,
+          "id": "latencyByApp"
+        }
+      ],
+      "table": {
+        "columns": [
+          {
+            "key": "vm",
+            "label": "Application / VM",
+            "format": "appVm",
+            "w": 1.6
+          },
+          {
+            "key": "config",
+            "label": "Config"
+          },
+          {
+            "key": "annualCompute",
+            "label": "Annual compute",
+            "format": "usd"
+          },
+          {
+            "key": "annualStorage",
+            "label": "Annual storage",
+            "format": "usd"
+          },
+          {
+            "key": "totalCost",
+            "label": "Total annual cost",
+            "format": "usd"
+          },
+          {
+            "key": "cpus",
+            "label": "CPUs",
+            "format": "num"
+          },
+          {
+            "key": "memoryGB",
+            "label": "Memory",
+            "format": "gb"
+          },
+          {
+            "key": "provisionedGiB",
+            "label": "Provisioned",
+            "format": "gib"
+          },
+          {
+            "key": "totalIops",
+            "label": "Total IOPS",
+            "format": "num"
+          },
+          {
+            "key": "totalMBps",
+            "label": "Total MBps",
+            "format": "num"
+          },
+          {
+            "key": "latencyMs",
+            "label": "Latency (ms)",
+            "format": "ms2"
+          },
+          {
+            "key": "cpuUtil",
+            "label": "CPU util",
+            "format": "pct"
+          },
+          {
+            "key": "ramUtil",
+            "label": "RAM util",
+            "format": "pct"
+          }
+        ]
+      },
+      "assistant": {
+        "prompts": [
+          {
+            "id": "large",
+            "label": "Only show Large configurations",
+            "match": [
+              "large"
+            ],
+            "action": {
+              "type": "filter",
+              "where": {
+                "config": "Large"
+              },
+              "label": "Config: Large"
+            },
+            "reply": "Filtered to **Large** configurations. The cards, the cost chart and the table now cover only those VMs. The trend charts are historical, so they stay the same.",
+            "summary": "Filtered to Large configurations"
+          },
+          {
+            "id": "costPie",
+            "label": "Change the cost chart to a pie chart",
+            "match": [
+              "pie"
+            ],
+            "action": {
+              "type": "replaceChart",
+              "id": "topCost",
+              "chart": {
+                "id": "topCost",
+                "type": "pie",
+                "title": "Annual cost by application",
+                "subtitle": "Compute + storage, last 12 months, USD",
+                "groupBy": "app",
+                "sum": "totalCost",
+                "format": "usd",
+                "top": 6,
+                "labelValues": false
+              }
+            },
+            "reply": "Switched the cost chart to a pie of **annual cost by application**: the top 6 apps, with the rest grouped as Other.",
+            "summary": "Cost chart → pie chart"
+          },
+          {
+            "id": "noConfig",
+            "label": "Remove the Config column",
+            "match": [
+              "config"
+            ],
+            "action": {
+              "type": "removeColumn",
+              "key": "config"
+            },
+            "reply": "Removed the **Config** column from the table.",
+            "summary": "Removed Config column"
+          },
+          {
+            "id": "sortCost",
+            "label": "Sort by total annual cost",
+            "match": [
+              "sort cost",
+              "sort total"
+            ],
+            "action": {
+              "type": "sort",
+              "key": "totalCost",
+              "desc": true
+            },
+            "reply": "Sorted the table by **Total annual cost**, highest first.",
+            "summary": "Sorted by Total annual cost"
+          },
+          {
+            "id": "top5",
+            "label": "Show only the top 5 consumers",
+            "match": [
+              "top 5",
+              "top five"
+            ],
+            "action": {
+              "type": "limit",
+              "id": "topCost",
+              "limit": 5
+            },
+            "reply": "Trimmed **Top annual consumer costs** to the top 5.",
+            "summary": "Top consumers limited to 5"
+          },
+          {
+            "id": "noLatency",
+            "label": "Hide the latency trends chart",
+            "match": [
+              "hide latency",
+              "remove latency"
+            ],
+            "action": {
+              "type": "removeChart",
+              "id": "latencyByApp"
+            },
+            "reply": "Removed **Latency trends by application**.",
+            "summary": "Removed latency trends chart"
+          }
+        ]
+      }
+    },
+    {
+      "id": "health",
+      "name": "Storage Health & Capacity Outlook",
+      "description": "Fleet utilization, array health, and growth — where capacity and performance risk is building.",
+      "owner": "Kevin Key",
+      "refreshed": "2026-10-06T00:00:23",
+      "dataset": "arrays",
+      "chartColumns": 3,
+      "kpis": [
+        {
+          "label": "USED CAPACITY",
+          "agg": "sum",
+          "field": "usedTiB",
+          "format": "tib0",
+          "spark": {
+            "source": "fleetDaily",
+            "y": "usedTiB"
+          },
+          "delta": {
+            "label": "vs 30 days ago"
+          }
+        },
+        {
+          "label": "TOTAL IOPS",
+          "agg": "sum",
+          "field": "iops",
+          "format": "num",
+          "spark": {
+            "source": "fleetDaily",
+            "y": "iops"
+          },
+          "delta": {
+            "label": "vs 30 days ago",
+            "goodWhen": "up"
+          }
+        },
+        {
+          "label": "AVG LATENCY",
+          "agg": "avg",
+          "field": "latencyMs",
+          "format": "msu",
+          "spark": {
+            "source": "fleetDaily",
+            "y": "latency"
+          },
+          "delta": {
+            "label": "vs 30 days ago",
+            "goodWhen": "down"
+          }
+        },
+        {
+          "label": "CRITICAL ARRAYS",
+          "agg": "count",
+          "where": {
+            "status": "Critical"
+          },
+          "spark": {
+            "source": "fleetDaily",
+            "y": "critical"
+          },
+          "delta": {
+            "label": "vs 30 days ago",
+            "goodWhen": "down",
+            "mode": "abs"
+          }
+        }
+      ],
+      "charts": [
+        {
+          "id": "util",
+          "type": "gauge",
+          "title": "Fleet capacity utilization",
+          "subtitle": "Used of raw capacity",
+          "num": {
+            "agg": "sum",
+            "field": "usedTiB"
+          },
+          "den": {
+            "agg": "sum",
+            "field": "rawTiB"
+          },
+          "warn": 75,
+          "crit": 90,
+          "unit": "TiB"
+        },
+        {
+          "id": "byDc",
+          "type": "pie",
+          "donut": true,
+          "title": "Used capacity by data center",
+          "subtitle": "TiB",
+          "groupBy": "dataCenter",
+          "sum": "usedTiB",
+          "format": "tib",
+          "centerLabel": "TiB used"
+        },
+        {
+          "id": "health",
+          "type": "stacked",
+          "title": "Array health by data center",
+          "subtitle": "Array count",
+          "groupBy": "dataCenter",
+          "stackBy": "status",
+          "order": [
+            "OK",
+            "Warning",
+            "Critical"
+          ],
+          "colors": [
+            "#90c44b",
+            "#ffac00",
+            "#ff4548"
+          ]
+        },
+        {
+          "id": "trend",
+          "type": "line",
+          "area": true,
+          "span": 2,
+          "vw": 940,
+          "title": "Fleet used capacity",
+          "subtitle": "Daily, last 30 days, TiB",
+          "source": "fleetDaily",
+          "x": "date",
+          "xFormat": "monthDay",
+          "xEvery": 5,
+          "series": [
+            {
+              "key": "usedTiB",
+              "name": "Used capacity",
+              "format": "tib"
+            }
+          ],
+          "ticks": [
+            0,
+            2000,
+            4000,
+            6000
+          ],
+          "height": 200
+        },
+        {
+          "id": "tight",
+          "type": "bullets",
+          "title": "Most constrained arrays",
+          "subtitle": "Used %, warning 75 · critical 90",
+          "label": "name",
+          "value": "usedPct",
+          "limit": 6,
+          "max": 100,
+          "warn": 75,
+          "crit": 90
+        }
+      ],
+      "table": {
+        "columns": [
+          {
+            "key": "name",
+            "label": "Array",
+            "w": 1.4
+          },
+          {
+            "key": "dataCenter",
+            "label": "Data center"
+          },
+          {
+            "key": "model",
+            "label": "Model"
+          },
+          {
+            "key": "usedPct",
+            "label": "Used",
+            "format": "pct",
+            "warn": 75,
+            "crit": 90
+          },
+          {
+            "key": "usedTiB",
+            "label": "Used TiB",
+            "format": "tib"
+          },
+          {
+            "key": "iopsTrend",
+            "label": "IOPS, 14 days",
+            "format": "spark",
+            "w": 1.2
+          },
+          {
+            "key": "iops",
+            "label": "IOPS",
+            "format": "num"
+          },
+          {
+            "key": "latencyMs",
+            "label": "Latency (ms)",
+            "format": "ms2",
+            "warn": 5,
+            "crit": 10
+          },
+          {
+            "key": "daysToFull",
+            "label": "Days to full",
+            "format": "num",
+            "warn": 90,
+            "crit": 30,
+            "lowIsBad": true
+          },
+          {
+            "key": "status",
+            "label": "Status",
+            "format": "status",
+            "w": 1.1
+          }
+        ]
+      },
+      "assistant": {
+        "prompts": [
+          {
+            "id": "crit",
+            "label": "Only show critical arrays",
+            "match": [
+              "critical"
+            ],
+            "action": {
+              "type": "filter",
+              "where": {
+                "status": "Critical"
+              },
+              "label": "Status: Critical"
+            },
+            "reply": "Filtered to **critical** arrays. The cards, gauge, breakdowns and table now cover only those. The 30-day trend is fleet history, so it stays the same.",
+            "summary": "Filtered to Critical arrays"
+          },
+          {
+            "id": "latSpark",
+            "label": "Add a latency trend column",
+            "match": [
+              "latency trend",
+              "latency spark"
+            ],
+            "action": {
+              "type": "addColumn",
+              "after": "latencyMs",
+              "column": {
+                "key": "latencyTrend",
+                "label": "Latency, 14 days",
+                "format": "spark",
+                "w": 1.2
+              }
+            },
+            "reply": "Added a **Latency, 14 days** sparkline next to Latency. fas8200-dur is clearly climbing.",
+            "summary": "Added Latency, 14 days column"
+          },
+          {
+            "id": "wide",
+            "label": "Make the capacity trend full width",
+            "match": [
+              "full width",
+              "wider"
+            ],
+            "action": {
+              "type": "resize",
+              "id": "trend",
+              "span": "full",
+              "vw": 1420
+            },
+            "reply": "Made **Fleet used capacity** span the full width of the report.",
+            "summary": "Capacity trend → full width"
+          },
+          {
+            "id": "donutBar",
+            "label": "Change the donut to a bar chart",
+            "match": [
+              "donut bar",
+              "bar chart"
+            ],
+            "action": {
+              "type": "replaceChart",
+              "id": "byDc",
+              "chart": {
+                "id": "byDc",
+                "type": "bar",
+                "horizontal": true,
+                "title": "Used capacity by data center",
+                "subtitle": "TiB",
+                "groupBy": "dataCenter",
+                "sum": "usedTiB",
+                "format": "tib",
+                "height": 220
+              }
+            },
+            "reply": "Switched **Used capacity by data center** to a bar chart, sorted largest to smallest.",
+            "summary": "Capacity by data center → bar chart"
+          },
+          {
+            "id": "line",
+            "label": "Show the trend as a line, not an area",
+            "match": [
+              "line"
+            ],
+            "action": {
+              "type": "replaceChart",
+              "id": "trend",
+              "chart": {
+                "id": "trend",
+                "type": "line",
+                "span": 2,
+                "vw": 940,
+                "title": "Fleet used capacity",
+                "subtitle": "Daily, last 30 days, TiB",
+                "source": "fleetDaily",
+                "x": "date",
+                "xFormat": "monthDay",
+                "xEvery": 5,
+                "series": [
+                  {
+                    "key": "usedTiB",
+                    "name": "Used capacity",
+                    "format": "tib"
+                  }
+                ],
+                "ticks": [
+                  0,
+                  2000,
+                  4000,
+                  6000
+                ],
+                "height": 200
+              }
+            },
+            "reply": "Switched **Fleet used capacity** from an area chart to a line chart.",
+            "summary": "Capacity trend → line chart"
+          },
+          {
+            "id": "sortFull",
+            "label": "Sort by days until full",
+            "match": [
+              "days",
+              "full soon",
+              "sort full"
+            ],
+            "action": {
+              "type": "sort",
+              "key": "daysToFull",
+              "desc": false
+            },
+            "reply": "Sorted the table by **Days to full**, soonest first.",
+            "summary": "Sorted by Days to full"
+          }
+        ]
+      },
+      "crossFilter": true
+    }
+  ]
+}

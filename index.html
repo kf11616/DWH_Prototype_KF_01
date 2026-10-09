@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@200;400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#fff;color:#111925;font-family:'Source Sans 3','Source Sans Pro',sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#0067c5;text-decoration:none}a:hover{color:#1e4a93;text-decoration:underline}
+input::placeholder{color:#858c95}
+@keyframes ta-spin{to{transform:rotate(360deg)}}
+@keyframes ta-edge{0%,35%{box-shadow:inset 3px 0 0 #0067c5,-8px 0 20px rgba(0,103,197,.28)}100%{box-shadow:inset 0 0 0 rgba(0,103,197,0),0 0 0 rgba(0,103,197,0)}}
+@keyframes ta-spark{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@keyframes ta-dot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column" onClick="{{ closeMenus }}">
+  <header data-screen-label="Header" style="height:66px;flex:none;display:flex;align-items:center;gap:24px;padding:0 24px 0 26px;border-bottom:1px solid #dee3e7">
+    <button style="background:none;border:0;padding:4px;cursor:pointer;display:flex" aria-label="Menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111925" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+    </button>
+    <div style="display:flex;align-items:center;gap:6px;font-weight:600;font-size:21px;letter-spacing:-0.3px">
+      <svg width="20" height="16" viewBox="0 0 20 16"><path d="M0 0h20v16h-6V6H6v10H0z" fill="#111925"></path></svg>
+      <span>NetApp</span>
+    </div>
+    <div onClick="{{ titleClick }}" style="font-size:17px;font-weight:600;user-select:none">Data Infrastructure Insights</div>
+    <div style="flex:1"></div>
+    <div style="display:flex;align-items:center;gap:32px">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#111925" stroke-width="2.2" stroke-linecap="round"><circle cx="10" cy="10" r="7"></circle><path d="M15.5 15.5L21 21"></path></svg>
+      <div style="font-size:14px;line-height:20px"><div style="font-weight:600">Tenant</div><div>PCS Sandbox</div></div>
+      <svg width="26" height="26" viewBox="0 0 24 24"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8z" fill="#5b7cf7"></path><path d="M18 2l.8 2.2L21 5l-2.2.8L18 8l-.8-2.2L15 5l2.2-.8z" fill="#7d96fa"></path></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#111925"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 0 0-5.5-6.8V3.5a1.5 1.5 0 0 0-3 0v.7A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"></path></svg>
+      <button onClick="{{ goFeatures }}" aria-label="Help" style="background:none;border:0;padding:0;display:flex;cursor:pointer"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#111925"></circle><path d="M9.2 9.2a2.9 2.9 0 1 1 4.3 2.5c-.9.5-1.5 1.1-1.5 2.1v.4" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"></path><circle cx="12" cy="17.6" r="1.3" fill="#fff"></circle></svg></button>
+      <svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#111925"></circle><circle cx="12" cy="9.5" r="3.6" fill="#fff"></circle><path d="M5.5 18.5c1.4-2.6 3.8-3.8 6.5-3.8s5.1 1.2 6.5 3.8" stroke="#fff" stroke-width="2.6" fill="none"></path></svg>
+    </div>
+  </header>
+
+  <div style="flex:{{ rowFlex }};display:flex;min-height:0;height:{{ rowH }}">
+  <div data-ta-canvas="1" onScroll="{{ canvasScroll }}" style="flex:1;min-width:0;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:{{ leftOverflow }}">
+    <sc-if value="{{ origBanner }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="position:sticky;top:0;z-index:4;flex:none;min-height:40px;display:flex;align-items:center;gap:10px;padding:8px 24px;box-sizing:border-box;background:#fff7c0;font-size:14px;color:#111925">
+        <svg width="16" height="16" viewBox="0 0 16 16" style="flex:none"><circle cx="8" cy="8" r="8" fill="#111925"></circle><path d="M8 7v4.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"></path><circle cx="8" cy="4.6" r="1" fill="#fff"></circle></svg>
+        <span style="flex:1">You're viewing the saved report. Your <span style="font-weight:600">{{ changeN }} {{ changeWord }}</span> are hidden, not lost.</span>
+        <button onClick="{{ toggleOrig }}" style="background:none;border:0;padding:0;font:inherit;font-size:14px;font-weight:600;color:#0067c5;cursor:pointer;white-space:nowrap" style-hover="color:#1e4a93;text-decoration:underline">Show my changes</button>
+      </div>
+    </sc-if>
+  <nav style="height:56px;flex:none;display:flex;align-items:center;gap:10px;padding:0 18px;border-bottom:1px solid #dee3e7;font-size:16px;background:#fff">
+    <sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+      <div style="align-self:flex-end;height:56px;box-sizing:border-box;margin:0 0 -1px 12px;padding:0 36px;display:flex;align-items:center;border-bottom:2px solid #0067c5;color:#0067c5;font-size:15px;font-weight:600;white-space:nowrap">{{ current.name }}</div>
+    </sc-if>
+    <sc-if value="{{ notEditing }}" hint-placeholder-val="{{ true }}">
+    <a href="#" style="color:#858c95;text-decoration:none">Observability</a>
+    <span style="color:#858c95">/</span>
+    <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+      <span style="font-weight:600">Trend Analytics</span>
+    </sc-if>
+    <sc-if value="{{ isFeatures }}" hint-placeholder-val="{{ false }}">
+      <a href="#" onClick="{{ goList }}" style="color:#858c95;text-decoration:none">Trend Analytics</a>
+      <span style="color:#858c95">/</span>
+      <span style="font-weight:600">Feature summary</span>
+    </sc-if>
+    <sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}">
+      <a href="#" onClick="{{ goList }}" style="color:#858c95;text-decoration:none">Trend Analytics</a>
+      <span style="color:#858c95">/</span>
+      <span style="font-weight:600">{{ current.name }}</span>
+    </sc-if>
+    </sc-if>
+  </nav>
+
+  <sc-if value="{{ isList }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Trend Analytics Reports" style="padding:32px 52px 32px 50px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;align-items:center;gap:8px;padding-left:4px">
+      <h1 style="margin:0;font-size:16px;font-weight:600;flex:1">Trend Analytics Reports</h1>
+      <div style="position:relative" onClick="{{ stop }}">
+        <button onClick="{{ toggleBulk }}" disabled="{{ bulkDisabled }}" style="width:160px;height:24px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;background:{{ bulkBg }};border:1px solid #cbd4da;border-radius:2px;font:inherit;font-size:15px;color:{{ bulkColor }};cursor:pointer">
+          <span>Bulk Actions</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#858c95" stroke-width="1.2"><path d="M2 3.5l3 3 3-3"></path></svg>
+        </button>
+        <sc-if value="{{ bulkOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;top:26px;left:0;width:160px;padding:6px 0;background:#fff;border:1px solid #dee3e7;box-shadow:0 2px 6px rgba(133,140,149,.35);z-index:5;font-size:14px">
+            <div onClick="{{ bulkRefresh }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Refresh</div>
+            <div style="height:1px;background:#dee3e7;margin:6px 0"></div>
+            <div onClick="{{ bulkDelete }}" style="padding:7px 12px;cursor:pointer;color:#da1e21" style-hover="background:#dfeffd">Delete</div>
+          </div>
+        </sc-if>
+      </div>
+      <label style="width:200px;height:24px;display:flex;align-items:center;gap:8px;padding:0 10px;border:1px solid #cbd4da;border-radius:2px;box-sizing:border-box">
+        <svg width="12" height="12" viewBox="0 0 12 12" stroke="#858c95" stroke-width="1.2"><path d="M1 2.5h10M3 6h6M5 9.5h2"></path></svg>
+        <input value="{{ query }}" onInput="{{ onQuery }}" placeholder="Filter..." style="border:0;outline:0;flex:1;min-width:0;font:inherit;font-size:15px;padding:0;background:transparent">
+      </label>
+    </div>
+
+    <div role="table" style="font-size:14px">
+      <div role="row" style="display:grid;grid-template-columns:40px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 40px;align-items:center;height:36px;border-bottom:1px solid #cbd4da;font-weight:600">
+        <div style="display:flex;justify-content:center"><input type="checkbox" checked="{{ allChecked }}" onChange="{{ toggleAll }}" style="width:16px;height:16px;margin:0;accent-color:#0067c5;cursor:pointer"></div>
+        <div>Name</div><div>Description</div><div>Owner</div>
+        <div onClick="{{ toggleSort }}" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none">Last Refreshed <span style="font-size:9px">{{ sortArrow }}</span></div>
+        <div></div>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="2">
+        <div role="row" onClick="{{ r.open }}" style="display:grid;grid-template-columns:40px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1fr) 40px;align-items:center;min-height:60px;border-bottom:1px solid #dee3e7;background:{{ r.bg }};cursor:pointer" style-hover="background:#f6f7f7">
+          <div onClick="{{ stop }}" style="display:flex;justify-content:center;opacity:{{ r.cbOpacity }}" style-hover="opacity:1"><input type="checkbox" checked="{{ r.checked }}" onChange="{{ r.toggle }}" style="width:16px;height:16px;margin:0;accent-color:#0067c5;cursor:pointer"></div>
+          <div style="padding-right:16px">{{ r.name }}</div>
+          <div style="padding:8px 16px 8px 0;line-height:18px;text-wrap:pretty">{{ r.description }}</div>
+          <div>{{ r.owner }}</div>
+          <div>{{ r.refreshed }}</div>
+          <div style="position:relative;display:flex;justify-content:center" onClick="{{ stop }}">
+            <button onClick="{{ r.toggleMenu }}" aria-label="Row actions" style="width:24px;height:24px;background:{{ r.kebabBg }};border:0;border-radius:2px;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center">
+              <svg width="4" height="14" viewBox="0 0 4 14" fill="{{ r.kebabFg }}"><circle cx="2" cy="2" r="1.5"></circle><circle cx="2" cy="7" r="1.5"></circle><circle cx="2" cy="12" r="1.5"></circle></svg>
+            </button>
+            <sc-if value="{{ r.menuOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;top:31px;right:0;width:146px;padding:6px 0;background:#fff;border:1px solid #dee3e7;box-shadow:0 2px 6px rgba(133,140,149,.35);z-index:5">
+                <div onClick="{{ r.edit }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Edit</div>
+                <div onClick="{{ r.refresh }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Refresh</div>
+                <div onClick="{{ r.csv }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Download CSV</div>
+                <div onClick="{{ closeMenus }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Download PNG</div>
+                <div style="height:1px;background:#dee3e7;margin:6px 0"></div>
+                <div onClick="{{ r.remove }}" style="padding:7px 12px;cursor:pointer;color:#da1e21" style-hover="background:#dfeffd">Delete</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:24px 40px;color:#4d5765">No reports match “{{ query }}”.</div>
+      </sc-if>
+    </div>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isFeatures }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Feature summary" style="flex:1;background:#f6f7f7;padding:24px 24px 48px 20px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div style="width:40px;height:40px;flex:none;border-radius:2px;background:#dfeffd;display:flex;align-items:center;justify-content:center;margin-top:2px">
+        <svg width="22" height="22" viewBox="0 0 24 24"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8z" fill="#0067c5"></path><path d="M18 2l.8 2.2L21 5l-2.2.8L18 8l-.8-2.2L15 5l2.2-.8z" fill="#2899ff"></path></svg>
+      </div>
+      <div style="flex:1;min-width:280px;display:flex;flex-direction:column;gap:4px">
+        <h1 style="margin:0;font-size:20px;line-height:28px;font-weight:600">{{ fs.title }}</h1>
+        <div style="font-size:14px;line-height:20px;color:#4d5765;max-width:760px;text-wrap:pretty">{{ fs.description }}</div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-left:auto">
+        <button onClick="{{ fsOpenReport }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;background:#fff;border:1px solid #cbd4da;color:#0067c5" style-hover="border-color:#1e4a93;color:#1e4a93;background:#f1f3f4">Open report</button>
+        <button onClick="{{ fsOpenEdit }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;border:0;background:#0067c5;color:#fff" style-hover="background:#1e4a93">Open in edit mode</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+      <sc-for list="{{ fsStats }}" as="st" hint-placeholder-count="3">
+        <div style="background:#fff;border:1px solid #dee3e7;box-shadow:0 1px 3px rgba(17,25,37,.06);padding:16px 18px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:12px;line-height:16px;letter-spacing:.08em;font-weight:600;color:#4d5765">{{ st.label }}</div>
+          <div style="font-size:26px;line-height:32px;font-weight:600">{{ st.value }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-for list="{{ fsGroups }}" as="g" hint-placeholder-count="3">
+      <section style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <h2 style="margin:0;font-size:16px;font-weight:600">{{ g.title }}</h2>
+          <span style="font-size:12px;line-height:16px;font-weight:600;padding:2px 8px;border-radius:10px;background:{{ g.scopeBg }};color:#111925">{{ g.scope }}</span>
+          <span style="font-size:14px;color:#4d5765">{{ g.count }} features</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px">
+          <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="4">
+            <div style="background:#fff;border:1px solid #dee3e7;box-shadow:0 1px 3px rgba(17,25,37,.06);padding:18px 20px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:baseline;gap:10px">
+                <span style="font-size:12px;font-weight:600;color:#0067c5;min-width:16px">{{ it.n }}</span>
+                <h3 style="margin:0;font-size:16px;line-height:22px;font-weight:600">{{ it.name }}</h3>
+              </div>
+              <div style="font-size:14px;line-height:20px;color:#4d5765;text-wrap:pretty;padding-left:26px">{{ it.desc }}</div>
+              <div style="margin-top:auto;padding:8px 0 0 26px;border-top:1px solid #f1f3f4;display:flex;gap:6px;font-size:13px;line-height:18px;color:#111925"><span style="font-weight:600;flex:none">Show it:</span><span style="text-wrap:pretty">{{ it.demo }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-for>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ isReport }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="{{ current.name }}" style="flex:1;background:#f6f7f7;padding:24px 24px 40px 20px;display:flex;flex-direction:column;gap:18px">
+    <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap">
+      <div style="width:40px;height:40px;flex:none;border-radius:2px;background:#dfeffd;display:flex;align-items:center;justify-content:center;margin-top:2px">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#0067c5" stroke-width="1.3"><rect x="3" y="2.5" width="14" height="15" rx="1"></rect><path d="M6.5 14v-3M10 14V8M13.5 14v-5M6 5.5h8"></path></svg>
+      </div>
+      <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:6px">
+        <h1 style="margin:0;font-size:20px;line-height:24px;font-weight:600;display:flex;flex-wrap:wrap;gap:0 10px">
+          <sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}"><a href="#" onClick="{{ goList }}" style="color:#858c95;font-weight:400;text-decoration:none">Trend Analytics</a><span style="color:#858c95;font-weight:400">/</span></sc-if>
+          <span>{{ current.name }}</span>
+        </h1>
+        <div style="font-size:14px;color:#4d5765">{{ current.description }}</div>
+      </div>
+      <div style="display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:12px 16px;margin-left:auto;font-size:14px;color:#4d5765">
+        <button onClick="{{ refreshCurrent }}" aria-label="Refresh" style="background:none;border:0;padding:0;cursor:pointer;display:flex">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#858c95" stroke-width="1.4" stroke-linecap="round" style="animation:{{ spinAnim }}"><path d="M16.5 10a6.5 6.5 0 1 1-1.9-4.6"></path><path d="M15 2.5v3.2h-3.2"></path></svg>
+        </button>
+        <span style="white-space:nowrap">Last Refreshed: {{ current.refreshedLong }}</span>
+        <div style="position:relative" onClick="{{ stop }}">
+          <button onClick="{{ toggleDl }}" aria-label="Download" style="background:none;border:0;padding:2px;cursor:pointer;display:flex">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#858c95" stroke-width="1.4" stroke-linecap="round"><path d="M9 2.5v9M5.5 8L9 11.5 12.5 8M3 15.5h12"></path></svg>
+          </button>
+          <sc-if value="{{ dlOpen }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:28px;right:0;width:146px;padding:6px 0;background:#fff;border:1px solid #dee3e7;box-shadow:0 2px 6px rgba(133,140,149,.35);z-index:5;color:#111925">
+              <div onClick="{{ csvCurrent }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Download CSV</div>
+              <div onClick="{{ closeMenus }}" style="padding:7px 12px;cursor:pointer" style-hover="background:#dfeffd">Download PNG</div>
+            </div>
+          </sc-if>
+        </div>
+        <sc-if value="{{ notEditing }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openEdit }}" style="height:32px;padding:0 16px;background:#fff;border:1px solid #cbd4da;border-radius:2px;color:#0067c5;font:inherit;font-size:15px;font-weight:600;cursor:pointer" style-hover="border-color:#1e4a93;color:#1e4a93;background:#f1f3f4">Edit</button>
+        </sc-if>
+        <sc-if value="{{ editing }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;align-items:center;gap:8px">
+            <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ toggleOrig }}" role="switch" aria-checked="{{ showOrig }}" style="height:32px;display:flex;align-items:center;gap:8px;padding:0 8px;background:none;border:0;border-radius:2px;font:inherit;font-size:14px;color:#111925;white-space:nowrap;cursor:pointer" style-hover="background:#f1f3f4">
+                <span style="width:28px;height:16px;flex:none;border-radius:8px;background:{{ origTrack }};position:relative;transition:background .12s"><span style="position:absolute;top:2px;left:{{ origKnob }};width:12px;height:12px;border-radius:50%;background:#fff;transition:left .12s"></span></span>Show original
+              </button>
+            </sc-if>
+            <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative;margin-right:4px" onClick="{{ stop }}">
+                <button data-ta-chg="1" onClick="{{ toggleChanges }}" aria-expanded="{{ changesOpen }}" style="height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;background:{{ chgBg }};border:0;border-radius:2px;font:inherit;font-size:14px;font-weight:600;color:#0067c5;white-space:nowrap;cursor:pointer" style-hover="background:#dfeffd">
+                  <span style="min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:#0067c5;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">{{ changeN }}</span>{{ changeWord }}
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#0067c5" stroke-width="1.4"><path d="M2 3.5l3 3 3-3"></path></svg>
+                </button>
+                <sc-if value="{{ changesOpen }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:fixed;top:{{ chgTop }};left:{{ chgLeft }};width:{{ chgW }};padding:6px 0;background:#fff;border:1px solid #dee3e7;box-shadow:0 2px 6px rgba(133,140,149,.35);z-index:6;color:#111925">
+                    <div style="padding:6px 12px 6px;font-size:12px;font-weight:600;letter-spacing:.08em;color:#4d5765">UNSAVED CHANGES</div>
+                    <sc-for list="{{ changeItems }}" as="ch" hint-placeholder-count="2">
+                      <div onClick="{{ ch.go }}" style="display:flex;gap:10px;align-items:baseline;padding:8px 12px;cursor:{{ ch.cursor }};font-size:14px;line-height:18px" style-hover="background:#dfeffd">
+                        <span style="color:#858c95;min-width:12px;font-size:12px">{{ ch.n }}</span><span style="flex:1">{{ ch.label }}</span><span style="font-size:12px;font-weight:600;color:{{ ch.hintColor }}">{{ ch.hint }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+            <button onClick="{{ cancelEdit }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;background:#fff;border:1px solid #cbd4da;color:#0067c5" style-hover="border-color:#1e4a93;color:#1e4a93;background:#f1f3f4">Cancel</button>
+            <button onClick="{{ saveEdit }}" disabled="{{ saveDisabled }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:0;background:{{ saveBg }};color:{{ saveFg }}">Save</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ xfActive }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:-8px 0 -4px;font-size:14px;color:#4d5765">
+        <span>Filtered by</span>
+        <span style="display:flex;align-items:center;gap:4px;height:24px;padding:0 4px 0 10px;background:#b0d7fa;border-radius:12px;color:#111925;font-size:13px"><span style="font-weight:600">{{ xfField }}:</span> {{ xfValue }}
+          <button onClick="{{ clearXf }}" aria-label="Remove filter" style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:50%;padding:0;cursor:pointer" style-hover="background:#dfeffd"><svg width="10" height="10" viewBox="0 0 18 18" stroke="#111925" stroke-width="2.2" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"></path></svg></button>
+        </span>
+        <button onClick="{{ clearXf }}" style="background:none;border:0;padding:0;font:inherit;font-size:14px;font-weight:600;color:#0067c5;cursor:pointer" style-hover="color:#1e4a93;text-decoration:underline">Clear filter</button>
+      </div>
+    </sc-if>
+    <sc-if value="{{ xfHint }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:6px;margin:-8px 0 -4px;font-size:13px;color:#4d5765"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#4d5765" stroke-width="1.3" stroke-linejoin="round"><path d="M2 3h12l-4.5 5.5V13l-3 1.5v-6z"></path></svg>Click a chart segment to filter the report.</div>
+    </sc-if>
+
+    <sc-if value="{{ hasData }}" hint-placeholder-val="{{ true }}">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+        <div data-ta-flash="{{ k.fl }}" data-ta-card="k:{{ $index }}" style="position:relative;background:#fff;border:1px solid {{ k.border }};box-shadow:{{ k.ring }};transition:box-shadow .4s;padding:16px 16px 14px;display:flex;flex-direction:column;gap:8px;min-width:0">
+          <sc-if value="{{ k.mod }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-10px;right:12px;z-index:1;background:#0067c5;color:#fff;font-size:11px;font-weight:600;letter-spacing:.03em;line-height:16px;padding:2px 8px;border-radius:10px">Modified</span></sc-if>
+          <div style="font-size:12px;line-height:16px;letter-spacing:.08em;font-weight:600;color:#4d5765">{{ k.label }}</div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">
+            <div style="font-size:26px;line-height:32px;font-weight:600;white-space:nowrap">{{ k.value }}</div>
+            <sc-if value="{{ k.hasSpark }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 100 32" preserveAspectRatio="none" style="width:96px;height:32px;flex:none;display:block;overflow:visible"><polygon points="{{ k.sparkArea }}" fill="rgba(1,44,173,.10)"></polygon><polyline points="{{ k.sparkPts }}" fill="none" stroke="#012cad" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline></svg></sc-if>
+          </div>
+          <sc-if value="{{ k.hasDelta }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;line-height:16px;display:flex;gap:6px"><span style="font-weight:600;color:{{ k.dColor }}">{{ k.dText }}</span><span style="color:#4d5765">{{ k.dLabel }}</span></div></sc-if>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(max(340px,{{ chartMin }}),1fr));grid-auto-flow:dense;gap:16px">
+      <sc-for list="{{ charts }}" as="c" hint-placeholder-count="3">
+        <section data-ta-flash="{{ c.fl }}" data-ta-card="c:{{ c.id }}" style="position:relative;grid-column:{{ c.gridCol }};background:#fff;border:1px solid {{ c.border }};box-shadow:{{ c.ring }};transition:box-shadow .4s;padding:24px 24px 20px;display:flex;flex-direction:column;gap:6px;min-height:300px;min-width:0">
+          <sc-if value="{{ c.mod }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-10px;right:12px;z-index:1;background:#0067c5;color:#fff;font-size:11px;font-weight:600;letter-spacing:.03em;line-height:16px;padding:2px 8px;border-radius:10px">Modified</span></sc-if>
+          <h2 style="margin:0;font-size:16px;font-weight:600">{{ c.title }}</h2>
+          <sc-if value="{{ c.hasSubtitle }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:14px;color:#4d5765">{{ c.subtitle }}</div>
+          </sc-if>
+          <sc-if value="{{ c.xfNote }}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-start;font-size:12px;line-height:16px;color:#4d5765;background:#f1f3f4;border-radius:10px;padding:2px 8px">Not filtered · fleet history</div>
+          </sc-if>
+
+          <sc-if value="{{ c.isPie }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;margin-top:8px">
+              <svg viewBox="0 0 460 240" style="width:100%;display:block;overflow:visible" onMouseLeave="{{ c.leave }}">
+                <sc-for list="{{ c.slices }}" as="s" hint-placeholder-count="6">
+                  <g>
+                    <path d="{{ s.d }}" fill="{{ s.color }}" stroke="#fff" stroke-width="2" transform="{{ s.transform }}" opacity="{{ s.opacity }}" onMouseEnter="{{ s.enter }}" onClick="{{ s.pick }}" style="cursor:pointer;transition:transform .12s"></path>
+                    <polyline points="{{ s.leader }}" fill="none" stroke="{{ s.color }}" stroke-width="1"></polyline>
+                  </g>
+                </sc-for>
+              </svg>
+              <sc-for list="{{ c.labels }}" as="t" hint-placeholder-count="0"><div style="position:absolute;left:{{ t.left }};top:{{ t.top }};transform:{{ t.tf }};font-size:{{ t.size }};font-weight:{{ t.weight }};color:{{ t.color }};white-space:nowrap;pointer-events:none;line-height:1">{{ t.text }}</div></sc-for>
+              <sc-if value="{{ c.pieTip.show }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;left:{{ c.pieTip.left }};top:{{ c.pieTip.top }};transform:translate(-50%,-50%);background:#fff;border:1px solid #cbd4da;border-radius:2px;box-shadow:0 2px 6px rgba(133,140,149,.35);padding:6px 10px;font-size:12px;display:flex;align-items:center;gap:8px;white-space:nowrap;pointer-events:none">
+                  <span style="width:8px;height:8px;background:{{ c.pieTip.color }}"></span>
+                  <span>{{ c.pieTip.name }}</span>
+                  <span style="font-weight:600;margin-left:12px">{{ c.pieTip.value }}</span>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;margin-top:4px">
+              <sc-for list="{{ c.legend }}" as="l" hint-placeholder-count="6">
+                <div onClick="{{ l.toggle }}" onMouseEnter="{{ l.enter }}" onMouseLeave="{{ c.leave }}" style="display:flex;align-items:center;gap:6px;cursor:pointer;color:{{ l.text }};user-select:none">
+                  <span style="width:7px;height:7px;border-radius:50%;background:{{ l.swatch }}"></span>{{ l.name }}
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ c.isBar }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;margin-top:12px">
+              <svg viewBox="{{ c.viewBox }}" style="width:100%;display:block;overflow:visible" onMouseLeave="{{ c.leave }}">
+                <sc-for list="{{ c.grid }}" as="g" hint-placeholder-count="3"><line x1="{{ g.x1 }}" x2="{{ g.x2 }}" y1="{{ g.y1 }}" y2="{{ g.y2 }}" stroke="{{ g.stroke }}"></line></sc-for>
+                <sc-for list="{{ c.bars }}" as="b" hint-placeholder-count="4">
+                  <g onMouseEnter="{{ b.enter }}" onClick="{{ b.pick }}" style="cursor:{{ b.cursor }}">
+                    <rect x="{{ b.hx }}" y="{{ b.hy }}" width="{{ b.hw }}" height="{{ b.hh }}" fill="transparent"></rect>
+                    <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" fill="{{ b.fill }}" opacity="{{ b.op }}" style="transition:opacity .12s"></rect>
+                  </g>
+                </sc-for>
+              </svg>
+              <sc-for list="{{ c.labels }}" as="t" hint-placeholder-count="0"><div style="position:absolute;left:{{ t.left }};top:{{ t.top }};transform:{{ t.tf }};font-size:{{ t.size }};font-weight:{{ t.weight }};color:{{ t.color }};white-space:nowrap;pointer-events:none;line-height:1">{{ t.text }}</div></sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ c.isLine }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;margin-top:12px">
+              <svg viewBox="{{ c.viewBox }}" style="width:100%;display:block;overflow:visible" onMouseLeave="{{ c.leave }}">
+                <sc-for list="{{ c.grid }}" as="g" hint-placeholder-count="4"><line x1="{{ g.x1 }}" x2="{{ g.x2 }}" y1="{{ g.y1 }}" y2="{{ g.y2 }}" stroke="{{ g.stroke }}"></line></sc-for>
+                <sc-if value="{{ c.cross.show }}" hint-placeholder-val="{{ false }}"><line x1="{{ c.cross.x }}" x2="{{ c.cross.x }}" y1="{{ c.cross.y1 }}" y2="{{ c.cross.y2 }}" stroke="#cbd4da" stroke-dasharray="3 3"></line></sc-if>
+                <sc-for list="{{ c.areas }}" as="ar" hint-placeholder-count="0"><polygon points="{{ ar.points }}" fill="{{ ar.color }}" opacity=".16"></polygon></sc-for>
+                <sc-for list="{{ c.series }}" as="s" hint-placeholder-count="1"><polyline points="{{ s.points }}" fill="none" stroke="{{ s.color }}" stroke-width="{{ s.w }}" stroke-linejoin="round"></polyline></sc-for>
+                <sc-for list="{{ c.dots }}" as="d" hint-placeholder-count="0"><circle cx="{{ d.cx }}" cy="{{ d.cy }}" r="3.5" fill="{{ d.color }}" stroke="#fff" stroke-width="1.5"></circle></sc-for>
+                <sc-for list="{{ c.zones }}" as="z" hint-placeholder-count="0"><rect x="{{ z.x }}" y="{{ z.y }}" width="{{ z.w }}" height="{{ z.h }}" fill="transparent" onMouseEnter="{{ z.enter }}"></rect></sc-for>
+              </svg>
+              <sc-for list="{{ c.labels }}" as="t" hint-placeholder-count="0"><div style="position:absolute;left:{{ t.left }};top:{{ t.top }};transform:{{ t.tf }};font-size:{{ t.size }};font-weight:{{ t.weight }};color:{{ t.color }};white-space:nowrap;pointer-events:none;line-height:1">{{ t.text }}</div></sc-for>
+              <sc-if value="{{ c.lineTip.show }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;left:{{ c.lineTip.left }};top:0;transform:{{ c.lineTip.tf }};background:#fff;border:1px solid #cbd4da;border-radius:2px;box-shadow:0 2px 6px rgba(133,140,149,.35);padding:8px 10px;font-size:12px;display:flex;flex-direction:column;gap:4px;white-space:nowrap;pointer-events:none;z-index:2">
+                  <div style="font-weight:600;color:#4d5765">{{ c.lineTip.title }}</div>
+                  <sc-for list="{{ c.lineTip.rows }}" as="tr" hint-placeholder-count="1">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <span style="width:8px;height:8px;background:{{ tr.color }}"></span>
+                      <span style="flex:1">{{ tr.name }}</span>
+                      <span style="font-weight:600;margin-left:12px">{{ tr.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;margin-top:6px;padding-left:8px">
+              <sc-for list="{{ c.legend }}" as="l" hint-placeholder-count="1">
+                <div onClick="{{ l.toggle }}" style="display:flex;align-items:center;gap:8px;color:{{ l.text }};cursor:pointer;user-select:none">
+                  <span style="width:16px;height:2px;background:{{ l.swatch }}"></span>{{ l.name }}
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ c.isGauge }}" hint-placeholder-val="{{ false }}">
+            <div style="position:relative;width:100%;max-width:300px;margin:16px auto 0">
+              <svg viewBox="0 0 240 136" style="width:100%;display:block;overflow:visible">
+                <path d="{{ c.gBg }}" fill="none" stroke="#f1f3f4" stroke-width="24"></path>
+                <path d="{{ c.gVal }}" fill="none" stroke="{{ c.gColor }}" stroke-width="24"></path>
+                <sc-for list="{{ c.gTicks }}" as="gt" hint-placeholder-count="2"><line x1="{{ gt.x1 }}" y1="{{ gt.y1 }}" x2="{{ gt.x2 }}" y2="{{ gt.y2 }}" stroke="{{ gt.color }}" stroke-width="2.5"></line></sc-for>
+              </svg>
+              <sc-for list="{{ c.labels }}" as="t" hint-placeholder-count="0"><div style="position:absolute;left:{{ t.left }};top:{{ t.top }};transform:{{ t.tf }};font-size:{{ t.size }};font-weight:{{ t.weight }};color:{{ t.color }};white-space:nowrap;pointer-events:none;line-height:1">{{ t.text }}</div></sc-for>
+            </div>
+            <div style="text-align:center;font-size:14px;color:#4d5765;margin-top:6px">{{ c.gCaption }}</div>
+            <div style="display:flex;justify-content:center;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:#4d5765;margin-top:12px">
+              <sc-for list="{{ c.gLegend }}" as="gl" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;background:{{ gl.color }}"></span>{{ gl.name }}</div></sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ c.isStacked }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+              <sc-for list="{{ c.sRows }}" as="sr" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:72px minmax(0,1fr) 24px;align-items:center;column-gap:10px;font-size:12px">
+                  <div style="text-align:right;color:#4d5765;overflow-wrap:anywhere">{{ sr.label }}</div>
+                  <div style="display:flex;height:22px">
+                    <sc-for list="{{ sr.segs }}" as="sg" hint-placeholder-count="2"><div onMouseEnter="{{ sg.enter }}" onMouseLeave="{{ c.leave }}" onClick="{{ sg.pick }}" title="{{ sg.title }}" style="width:{{ sg.w }};background:{{ sg.color }};opacity:{{ sg.op }};display:flex;align-items:center;justify-content:center;color:#111925;font-size:11px;font-weight:600;overflow:hidden;cursor:pointer;transition:opacity .12s">{{ sg.txt }}</div></sc-for>
+                  </div>
+                  <div style="font-weight:600;color:#111925">{{ sr.total }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;margin-top:18px;padding-top:12px;border-top:1px solid #dee3e7">
+              <sc-for list="{{ c.legend }}" as="l" hint-placeholder-count="3">
+                <div onClick="{{ l.toggle }}" style="display:flex;align-items:center;gap:8px;cursor:pointer;color:{{ l.text }};user-select:none">
+                  <span style="width:10px;height:10px;background:{{ l.swatch }}"></span><span style="flex:1">{{ l.name }}</span><span style="font-weight:600;color:{{ l.countColor }}">{{ l.count }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ c.isBullets }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:14px;margin-top:16px">
+              <sc-for list="{{ c.bRows }}" as="br" hint-placeholder-count="6">
+                <div onClick="{{ br.pick }}" title="{{ br.title }}" style="display:grid;grid-template-columns:96px minmax(0,1fr) 40px;align-items:center;column-gap:10px;font-size:12px;cursor:pointer;opacity:{{ br.op }};transition:opacity .12s">
+                  <div style="text-align:right;color:#4d5765;overflow-wrap:anywhere">{{ br.label }}</div>
+                  <div style="position:relative;height:18px;background:#f1f3f4">
+                    <div style="position:absolute;top:0;bottom:0;left:{{ br.warnL }};width:{{ br.warnW }};background:#ffe1a1"></div>
+                    <div style="position:absolute;top:0;bottom:0;left:{{ br.critL }};right:0;background:#fccdce"></div>
+                    <div style="position:absolute;top:5px;height:8px;left:0;width:{{ br.w }};background:{{ br.color }}"></div>
+                  </div>
+                  <div style="font-weight:600;color:#111925">{{ br.text }}</div>
+                </div>
+              </sc-for>
+              <div style="display:grid;grid-template-columns:96px minmax(0,1fr) 40px;column-gap:10px;font-size:11px;color:#4d5765">
+                <div></div>
+                <div style="position:relative;height:12px"><sc-for list="{{ c.bTicks }}" as="bt" hint-placeholder-count="5"><span style="position:absolute;left:{{ bt.left }};transform:translateX(-50%)">{{ bt.text }}</span></sc-for></div>
+                <div></div>
+              </div>
+            </div>
+          </sc-if>
+        </section>
+      </sc-for>
+    </div>
+
+    <div role="table" data-ta-flash="{{ tFl }}" data-ta-card="t" style="position:relative;background:#fff;border:1px solid {{ tBorder }};box-shadow:{{ tRing }};transition:box-shadow .4s;font-size:14px">
+      <sc-if value="{{ tMod }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:-10px;right:12px;z-index:1;background:#0067c5;color:#fff;font-size:11px;font-weight:600;letter-spacing:.03em;line-height:16px;padding:2px 8px;border-radius:10px">Modified</span></sc-if>
+      <sc-if value="{{ hasFilter }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:8px;padding:10px 8px 2px;font-size:12px;color:#4d5765">Filtered by <span style="background:#b0d7fa;color:#111925;border-radius:10px;padding:2px 10px;letter-spacing:.03em">{{ filterLabel }}</span></div>
+      </sc-if>
+      <div style="overflow-x:auto"><div style="min-width:{{ tMinW }}">
+      <div role="row" style="display:grid;grid-template-columns:{{ tGrid }};column-gap:16px;align-items:center;min-height:36px;padding:8px;box-sizing:border-box;border-bottom:1px solid #cbd4da;font-weight:600;line-height:18px">
+        <sc-for list="{{ tCols }}" as="col" hint-placeholder-count="7">
+          <div onClick="{{ col.sort }}" style="display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;min-width:0;overflow-wrap:anywhere">{{ col.label }}<span style="font-size:9px">{{ col.arrow }}</span></div>
+        </sc-for>
+      </div>
+      <sc-for list="{{ tRows }}" as="row" hint-placeholder-count="6">
+        <div role="row" style="display:grid;grid-template-columns:{{ tGrid }};column-gap:16px;align-items:center;min-height:42px;padding:12px 8px;box-sizing:border-box;border-bottom:1px solid #dee3e7;line-height:18px" style-hover="background:#f6f7f7">
+          <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="7"><div style="min-width:0;overflow-wrap:anywhere">
+            <sc-if value="{{ cell.isText }}" hint-placeholder-val="{{ true }}">{{ cell.v }}</sc-if>
+            <sc-if value="{{ cell.isPill }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;white-space:nowrap;background:{{ cell.bg }};color:#111925;border-radius:10px;padding:1px 10px;line-height:18px">{{ cell.v }}</span></sc-if>
+            <sc-if value="{{ cell.isSpark }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 100 24" preserveAspectRatio="none" style="width:100%;max-width:110px;height:22px;display:block;overflow:visible"><polyline points="{{ cell.points }}" fill="none" stroke="{{ cell.color }}" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"></polyline><circle cx="100" cy="{{ cell.endY }}" r="2" fill="{{ cell.color }}"></circle></svg></sc-if>
+          </div></sc-for>
+        </div>
+      </sc-for>
+      </div></div>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:8px 12px;font-size:14px;color:#4d5765">
+        <span>{{ tRange }}</span>
+        <button onClick="{{ tPrev }}" disabled="{{ tPrevDisabled }}" aria-label="Previous page" style="width:24px;height:24px;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="{{ tPrevColor }}" stroke-width="1.6"><path d="M6.5 1L1.5 6l5 5"></path></svg></button>
+        <button onClick="{{ tNext }}" disabled="{{ tNextDisabled }}" aria-label="Next page" style="width:24px;height:24px;background:none;border:0;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="8" height="12" viewBox="0 0 8 12" fill="none" stroke="{{ tNextColor }}" stroke-width="1.6"><path d="M1.5 1l5 5-5 5"></path></svg></button>
+      </div>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ noData }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#fff;border:1px solid #dee3e7;padding:48px 24px;text-align:center;color:#4d5765;font-size:14px">No Data Available</div>
+    </sc-if>
+  </main>
+  </sc-if>
+  </div>
+
+  <aside data-screen-label="AI assistant drawer" aria-label="AI assistant" style="animation:{{ drawerAnim }};flex:none;position:relative;overflow:hidden;background:#fff;box-sizing:border-box;width:{{ drawerW }};border-left:{{ drawerBorder }};transition:width .32s cubic-bezier(.2,.8,.2,1)">
+    <div style="position:absolute;top:0;right:0;bottom:0;width:420px;display:flex;flex-direction:column;opacity:{{ panelOpacity }};pointer-events:{{ panelPE }};transition:opacity .2s">
+      <div style="height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 12px 0 20px;border-bottom:1px solid #dee3e7">
+        <svg width="22" height="22" viewBox="0 0 24 24" style="flex:none;animation:{{ sparkAnim }}"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8z" fill="#5b7cf7"></path><path d="M18 2l.8 2.2L21 5l-2.2.8L18 8l-.8-2.2L15 5l2.2-.8z" fill="#7d96fa"></path></svg>
+        <div style="flex:1;font-size:17px;font-weight:600">AI assistant</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <button onClick="{{ newChat }}" title="New chat" aria-label="New chat" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#dfeffd"><svg width="18" height="18" viewBox="0 0 18 18" stroke="#4d5765" stroke-width="1.5" stroke-linecap="round"><path d="M9 3v12M3 9h12"></path></svg></button>
+          <button onClick="{{ dlChat }}" title="Download conversation" aria-label="Download conversation" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#dfeffd"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#858c95" stroke-width="1.4" stroke-linecap="round"><path d="M9 2.5v9M5.5 8L9 11.5 12.5 8M3 15.5h12"></path></svg></button>
+          <button onClick="{{ minimize }}" title="Minimize" aria-label="Minimize" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#dfeffd"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#858c95" stroke-width="1.4" stroke-linecap="round"><path d="M15.5 2.5L10.5 7.5M10.5 3.5v4h4M2.5 15.5l5-5M7.5 14.5v-4h-4"></path></svg></button>
+          <button onClick="{{ closeEdit }}" title="Close" aria-label="Close" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#dfeffd"><svg width="18" height="18" viewBox="0 0 18 18" stroke="#858c95" stroke-width="1.5" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"></path></svg></button>
+        </div>
+      </div>
+      <div data-ta-transcript="1" style="flex:1;overflow-y:auto;padding:28px 24px 16px;display:flex;flex-direction:column;gap:20px">
+        <sc-for list="{{ chat }}" as="m" hint-placeholder-count="1">
+          <div style="align-self:{{ m.align }};max-width:{{ m.maxW }};display:flex;flex-direction:column;gap:8px">
+            <div style="background:{{ m.bg }};padding:{{ m.pad }};border-radius:4px;font-size:15px;line-height:24px;color:#111925;white-space:pre-wrap;text-wrap:pretty"><sc-for list="{{ m.parts }}" as="p" hint-placeholder-count="1"><span style="font-weight:{{ p.w }}">{{ p.t }}</span></sc-for></div>
+            <sc-if value="{{ m.showActions }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;align-items:center;gap:2px;margin-left:-6px">
+                <button onClick="{{ m.copy }}" title="Copy" aria-label="Copy" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4">
+                  <sc-if value="{{ m.notCopied }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#858c95" stroke-width="1.3"><rect x="5.5" y="5.5" width="8" height="8" rx="1"></rect><path d="M10.5 3.5v-1h-8v8h1"></path></svg></sc-if>
+                  <sc-if value="{{ m.copied }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#498128" stroke-width="1.6" stroke-linecap="round"><path d="M3 8.5l3 3 7-7"></path></svg></sc-if>
+                </button>
+                <button onClick="{{ m.up }}" title="Good response" aria-label="Good response" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4"><svg width="16" height="16" viewBox="0 0 16 16" fill="{{ m.upFill }}" stroke="{{ m.upStroke }}" stroke-width="1.3" stroke-linejoin="round"><path d="M5 7v7H2.5V7H5zm0 0l2.6-5c1 0 1.7.8 1.5 1.8L8.7 6h4c.9 0 1.5.8 1.3 1.7l-1.1 5.1c-.2.7-.7 1.2-1.4 1.2H5"></path></svg></button>
+                <button onClick="{{ m.down }}" title="Bad response" aria-label="Bad response" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4"><svg width="16" height="16" viewBox="0 0 16 16" fill="{{ m.downFill }}" stroke="{{ m.downStroke }}" stroke-width="1.3" stroke-linejoin="round"><g transform="rotate(180 8 8)"><path d="M5 7v7H2.5V7H5zm0 0l2.6-5c1 0 1.7.8 1.5 1.8L8.7 6h4c.9 0 1.5.8 1.3 1.7l-1.1 5.1c-.2.7-.7 1.2-1.4 1.2H5"></path></g></svg></button>
+                <sc-if value="{{ m.canUndo }}" hint-placeholder-val="{{ false }}"><button onClick="{{ m.undo }}" title="Undo this change" style="height:28px;display:flex;align-items:center;gap:4px;padding:0 6px;margin-left:4px;background:none;border:0;border-radius:2px;font:inherit;font-size:13px;font-weight:600;color:#0067c5;cursor:pointer" style-hover="background:#dfeffd"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#0067c5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3L2.5 6l3 3"></path><path d="M2.5 6h7a4 4 0 010 8H7"></path></svg>Undo</button></sc-if>
+                <sc-if value="{{ m.undone }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px;color:#858c95;margin-left:8px">Undone</span></sc-if>
+                <span style="font-size:13px;color:#4d5765;margin-left:8px">{{ m.time }}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}"><div style="padding:4px 0">{{ thinkingEl }}</div></sc-if>
+        <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-top:12px">
+            <div style="display:flex;align-items:center;gap:4px;font-size:15px;font-weight:600;color:#111925">Suggested prompts
+              <button onClick="{{ morePrompts }}" title="More prompts" aria-label="More prompts" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="#4d5765" stroke-width="1.8" stroke-linecap="round"><path d="M16.5 10a6.5 6.5 0 1 1-1.9-4.6"></path><path d="M15 2.5v3.2h-3.2"></path></svg></button>
+            </div>
+            <sc-for list="{{ prompts }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.run }}" style="border:0;border-radius:20px;padding:10px 22px;background:linear-gradient(90deg,#e8eefc,#f1e6fb);font:inherit;font-size:15px;line-height:20px;color:#111925;cursor:pointer;text-align:right" style-hover="background:linear-gradient(90deg,#dfeffd,#e9dcfa)">{{ p.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <div style="flex:none;padding:12px 24px 24px">
+        <div style="border:1px solid {{ composerBorder }};border-radius:4px;padding:12px 8px 8px 16px;display:flex;flex-direction:column;gap:4px;transition:border-color .12s">
+          <textarea value="{{ draft }}" onInput="{{ onDraft }}" onKeyDown="{{ onKey }}" onFocus="{{ onFocus }}" onBlur="{{ onBlur }}" placeholder="How can I help?" rows="3" style="border:0;outline:0;resize:none;font:inherit;font-size:15px;line-height:22px;color:#111925;padding:0;background:transparent"></textarea>
+          <div style="display:flex;justify-content:flex-end">
+            <button onClick="{{ send }}" disabled="{{ sendDisabled }}" aria-label="Send" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M2 8.6L16.5 2 13 16.5l-3.6-5.3L2 8.6z" fill="{{ sendColor }}"></path></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ drawerMin }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ expand }}" title="Open AI assistant" aria-label="Open AI assistant" style="position:absolute;top:0;left:0;width:47px;height:57px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-bottom:1px solid #dee3e7;cursor:pointer" style-hover="background:#dfeffd"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M10 3l1.8 5.2L17 10l-5.2 1.8L10 17l-1.8-5.2L3 10l5.2-1.8z" fill="#5b7cf7"></path><path d="M18 2l.8 2.2L21 5l-2.2.8L18 8l-.8-2.2L15 5l2.2-.8z" fill="#7d96fa"></path></svg></button>
+    </sc-if>
+  </aside>
+  </div>
+
+  <sc-if value="{{ saveOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSave }}" style="position:fixed;inset:0;z-index:50;background:rgba(17,25,37,.8);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="dialog" aria-modal="true" aria-labelledby="ta-save-title" onClick="{{ stop }}" style="width:100%;max-width:560px;background:#fff;border-radius:2px;box-shadow:0 4px 12px rgba(17,25,37,.25)">
+        <div style="height:60px;display:flex;align-items:center;gap:12px;padding:0 12px 0 18px;border-bottom:1px solid #dee3e7">
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="#0067c5" stroke-width="1.3"><rect x="3" y="2.5" width="14" height="15" rx="1"></rect><path d="M6.5 14v-3M10 14V8M13.5 14v-5M6 5.5h8"></path></svg>
+          <h2 id="ta-save-title" style="margin:0;flex:1;font-size:20px;line-height:24px;font-weight:600">Save report</h2>
+          <button onClick="{{ closeSave }}" aria-label="Close" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4"><svg width="16" height="16" viewBox="0 0 18 18" stroke="#4d5765" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"></path></svg></button>
+        </div>
+        <div style="padding:18px 16px 18px;display:flex;flex-direction:column;gap:16px">
+          <sc-if value="{{ dirty }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#f6f7f7;border:1px solid #dee3e7;padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+              <div style="font-size:14px;font-weight:600">{{ changeN }} {{ changeWord }} will be saved</div>
+              <sc-for list="{{ changeItems }}" as="ch" hint-placeholder-count="2">
+                <div style="display:flex;gap:8px;align-items:baseline;font-size:14px;line-height:18px"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#498128" stroke-width="2" stroke-linecap="round" style="flex:none;transform:translateY(1px)"><path d="M3 8.5l3 3 7-7"></path></svg><span>{{ ch.label }}</span></div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600">Name
+            <input data-ta-save-name="1" value="{{ saveName }}" onInput="{{ onSaveName }}" onKeyDown="{{ onSaveKey }}" style="width:100%;box-sizing:border-box;border:1px solid #cbd4da;border-radius:2px;font:inherit;font-size:16px;line-height:20px;color:#111925;padding:6px 8px;outline:0;height:32px;font-weight:400;border-color:{{ nameBorder }}">
+            <sc-if value="{{ nameError }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;font-weight:400;color:#da1e21">Enter a report name.</span></sc-if>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:8px;font-size:14px;font-weight:600">Description
+            <textarea value="{{ saveDesc }}" onInput="{{ onSaveDesc }}" rows="3" style="width:100%;box-sizing:border-box;border:1px solid #cbd4da;border-radius:2px;font:inherit;font-size:16px;line-height:20px;color:#111925;padding:6px 8px;outline:0;font-weight:400;resize:vertical"></textarea>
+          </label>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:12px;padding:16px;border-top:1px solid #dee3e7">
+          <button onClick="{{ closeSave }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;background:#fff;border:1px solid #cbd4da;color:#0067c5" style-hover="border-color:#1e4a93;color:#1e4a93;background:#f1f3f4">Cancel</button>
+          <button onClick="{{ confirmSave }}" disabled="{{ nameError }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:0;background:{{ confirmBg }};color:{{ confirmFg }}" style-hover="background:#1e4a93">Save report</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ discardOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ keepEditing }}" style="position:fixed;inset:0;z-index:55;background:rgba(17,25,37,.8);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div role="alertdialog" aria-modal="true" aria-labelledby="ta-discard-title" onClick="{{ stop }}" style="width:100%;max-width:480px;background:#fff;border-radius:2px;box-shadow:0 4px 12px rgba(17,25,37,.25)">
+        <div style="height:60px;display:flex;align-items:center;gap:12px;padding:0 12px 0 18px;border-bottom:1px solid #dee3e7">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 2.5L23 21.5H1z" fill="#f88402"></path><path d="M12 9.5v5.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path><circle cx="12" cy="18.2" r="1.3" fill="#fff"></circle></svg>
+          <h2 id="ta-discard-title" style="margin:0;flex:1;font-size:20px;line-height:24px;font-weight:600">Discard changes?</h2>
+          <button onClick="{{ keepEditing }}" aria-label="Close" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:2px;padding:0;cursor:pointer" style-hover="background:#f1f3f4"><svg width="16" height="16" viewBox="0 0 18 18" stroke="#4d5765" stroke-width="1.6" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"></path></svg></button>
+        </div>
+        <div style="padding:18px 16px;font-size:16px;line-height:22px;color:#111925;text-wrap:pretty">You have {{ changeN }} {{ changeWord }} to <span style="font-weight:600">{{ current.name }}</span>. If you leave now, they'll be lost.</div>
+        <div style="display:flex;justify-content:flex-end;gap:12px;padding:16px;border-top:1px solid #dee3e7">
+          <button onClick="{{ keepEditing }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;background:#fff;border:1px solid #cbd4da;color:#0067c5" style-hover="border-color:#1e4a93;color:#1e4a93;background:#f1f3f4">Keep editing</button>
+          <button onClick="{{ confirmDiscard }}" style="height:32px;padding:0 16px;border-radius:2px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;border:0;background:#da1e21;color:#fff" style-hover="background:#a30d0f">Discard changes</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:fixed;top:82px;left:50%;transform:translateX(-50%);z-index:60;min-width:160px;max-width:400px;min-height:50px;box-sizing:border-box;padding:0 16px;background:#b4e697;display:flex;align-items:center;gap:10px;font-size:14px;color:#111925;box-shadow:0 2px 6px rgba(133,140,149,.35)">
+      <svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8" fill="#498128"></circle><path d="M4.5 8.2l2.3 2.3 4.7-4.8" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round"></path></svg>
+      <span style="flex:1"><span style="font-weight:600">{{ toast }}</span>{{ toastRest }}</span>
+      <button onClick="{{ closeToast }}" aria-label="Dismiss" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;cursor:pointer"><svg width="12" height="12" viewBox="0 0 18 18" stroke="#111925" stroke-width="2" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"></path></svg></button>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const lbl = (x, y, W, H, anchor, text, size, weight, color) => ({ left: (x / W * 100) + '%', top: (y / H * 100) + '%', tf: anchor === 'end' ? 'translate(-100%,-50%)' : anchor === 'start' ? 'translate(0,-50%)' : 'translate(-50%,-50%)', text: String(text), size: size || '11px', weight: weight || 400, color: color || '#4d5765' });
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const PIE_COLORS = ['#012cad', '#5e8dcd', '#0baffc', '#68c6b3', '#b2d234', '#fdc300'];
+const CHART = ['#012cad', '#5e8dcd', '#0baffc', '#68c6b3', '#b2d234', '#fdc300', '#f7941d', '#fe5502', '#a815f3', '#570800'];
+const PAGE = 25;
+const SHADOW = '0 1px 3px rgba(17,25,37,.06)', RING = '0 0 0 2px #0067c5, 0 1px 3px rgba(17,25,37,.06)';
+const FALLBACK = "I can't make that change in this prototype yet. Try one of the suggested prompts below.";
+const md = t => String(t).split('**').map((x, k) => ({ t: x, w: k % 2 ? 600 : 400 })).filter(p => p.t);
+const hhmm = d => (d.getHours() % 12 || 12) + ':' + String(d.getMinutes()).padStart(2, '0') + ' ' + (d.getHours() < 12 ? 'AM' : 'PM');
+const matches = (p, t) => (p.match || []).some(m => m.split(' ').every(w => t.includes(w)));
+const chartData = (sp, rows) => sp.type === 'line' ? null : sp.type === 'gauge' ? [agg(rows, sp.num), agg(rows, sp.den)] : sp.type === 'stacked' ? rows.map(r => r[sp.groupBy] + '|' + r[sp.stackBy]).sort() : sp.type === 'bullets' ? topN(rows, sp.label, sp.value, sp.limit || 6) : sp.type === 'pie' ? groupSum(rows, sp.groupBy, sp.sum) : sp.groupBy ? groupSum(rows, sp.groupBy, sp.sum) : sp.buckets ? bucketCount(rows, sp.field, sp.buckets) : topN(rows, sp.label, sp.value, sp.limit || 8);
+function applyAction(d, a) {
+  const ci = id => d.charts.findIndex(c => c.id === id);
+  if (a.type === 'addColumn') { if (d.table.columns.some(c => c.key === a.column.key)) return 'table'; const k = d.table.columns.findIndex(c => c.key === a.after); d.table.columns.splice(k < 0 ? d.table.columns.length : k + 1, 0, a.column); return 'table'; }
+  if (a.type === 'removeColumn') { d.table.columns = d.table.columns.filter(c => c.key !== a.key); return 'table'; }
+  if (a.type === 'filter') { d.filter = { ...(d.filter || {}), ...a.where }; d.filterLabel = a.label; return 'data'; }
+  if (a.type === 'replaceChart') { const k = ci(a.id); if (k >= 0) d.charts[k] = a.chart; return 'c:' + a.chart.id; }
+  if (a.type === 'removeChart') { d.charts = d.charts.filter(c => c.id !== a.id); return null; }
+  if (a.type === 'sort') { d.table.sort = { key: a.key, desc: !!a.desc }; return 'table'; }
+  if (a.type === 'resize') { const k = ci(a.id); if (k >= 0) { d.charts[k].span = a.span; if (a.vw) d.charts[k].vw = a.vw; } return 'c:' + a.id; }
+  if (a.type === 'limit') { const k = ci(a.id); if (k >= 0) { d.charts[k].limit = a.limit; d.charts[k].top = a.limit; } return 'c:' + a.id; }
+  return null;
+}
+const DATA_FILES = ['data/features.json', 'data/reports.json', 'data/volumes.json', 'data/applications.json', 'data/arrays.json', 'data/history.json'];
+const STATUS_BG = { OK: '#b4e697', Warning: '#ffe1a1', Critical: '#fccdce' };
+const sparkPts = (vals, w, h, pad) => { const mn = Math.min(...vals), mx = Math.max(...vals), rg = mx - mn || 1; return vals.map((v, j) => [j / Math.max(vals.length - 1, 1) * w, pad + (1 - (v - mn) / rg) * (h - pad * 2)]); };
+const arcPath = (cx, cy, r, t0, t1) => { const p = t => [cx - r * Math.cos(Math.PI * t), cy - r * Math.sin(Math.PI * t)]; const [x0, y0] = p(t0), [x1, y1] = p(t1); return t1 - t0 < 1e-4 ? '' : `M${x0},${y0}A${r},${r} 0 0 1 ${x1},${y1}`; };
+const n0 = v => Math.round(v).toLocaleString('en-US');
+const FMT = {
+  usd: v => '$' + n0(v), gib: v => n0(v) + ' GiB', gb: v => n0(v) + ' GB', tib0: v => n0(v) + ' TiB', tib: v => (Math.round(v * 10) / 10).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' TiB',
+  cap: v => v >= 1 ? v.toFixed(1) + ' TiB' : Math.round(v * 1024) + ' GiB', days: v => v + ' days', pct: v => v + '%',
+  ms2: v => v.toFixed(2), ms: v => v + ' ms', iops: v => v.toLocaleString('en-US') + ' IOPS', num: v => v.toLocaleString('en-US'),
+  volumes: v => v.toLocaleString('en-US') + ' volumes', msu: v => v.toFixed(2) + ' ms', k: v => v >= 1000 ? (v / 1000) + 'K' : String(v),
+};
+const fmt = (v, f, row) => f === 'appVm' ? row.app + ' · ' + row.vm : v == null ? '' : FMT[f] ? FMT[f](v) : typeof v === 'number' ? v.toLocaleString('en-US') : String(v);
+const fmtX = (v, f) => { if (f === 'mmdd') return v.slice(5); if (f === 'monthDay') { const d = new Date(v + 'T00:00:00'); return MONTHS[d.getMonth()] + ' ' + d.getDate(); } return v; };
+const niceMax = m => { const p = Math.pow(10, Math.floor(Math.log10(m || 1))); return [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(k => k * p >= m) * p; };
+const XF_FIELDS = { dataCenter: 'Data center', status: 'Status', name: 'Array', model: 'Model' };
+const where = (rows, w) => w ? rows.filter(r => Object.keys(w).every(k => r[k] === w[k])) : rows;
+const agg = (rows, s) => { const r = where(rows, s.where); return s.agg === 'sum' ? r.reduce((a, x) => a + x[s.field], 0) : s.agg === 'avg' ? (r.length ? Math.round(r.reduce((a, x) => a + x[s.field], 0) / r.length * 100) / 100 : 0) : s.agg === 'distinct' ? new Set(r.map(x => x[s.field])).size : r.length; };
+const groupSum = (rows, by, f) => { const m = {}; rows.forEach(r => { m[r[by]] = (m[r[by]] || 0) + r[f]; }); return Object.entries(m).map(([name, v]) => ({ name, v: Math.round(v * 10) / 10 })).sort((a, b) => b.v - a.v); };
+const bucketCount = (rows, f, bs) => bs.map(b => ({ label: b.label, v: rows.filter(r => r[f] >= b.min && (b.max == null || r[f] < b.max)).length }));
+const topN = (rows, label, value, n) => [...rows].sort((a, b) => b[value] - a[value]).slice(0, n).map(r => ({ label: r[label], v: r[value] }));
+
+class Component extends DCLogic {
+  state = {
+    db: null, reports: [],
+    selected: {}, query: '', sortDesc: null, menu: null, bulkOpen: false, dlOpen: false,
+    view: (typeof localStorage !== 'undefined' && localStorage.getItem('ta-view')) || null,
+    hover: {}, hidden: {}, tSort: null, tDesc: false, tPage: 0, spinning: false,
+    editing: (typeof localStorage !== 'undefined' && localStorage.getItem('ta-edit') === '1'),
+    drawerMin: false, msgs: [], draft: '', composerFocus: false,
+    saveOpen: false, saveName: '', saveDesc: '', toast: null, toastRest: ' saved.', xf: null, typing: null, showOrig: false, pulse: false, changesOpen: false, discard: null,
+    edit: null, thinking: false, flash: null, promptOffset: 0, fb: {}, copied: null, chatStart: new Date(),
+  };
+  tRef = React.createRef();
+  onEsc = e => { if (e.altKey && e.shiftKey && e.code === 'KeyR') { e.preventDefault(); return this.resetDemo(); } if (e.key !== 'Escape') return; if (this.state.discard) this.setState({ discard: null }); else if (this.state.saveOpen) this.setState({ saveOpen: false }); else if (this.state.changesOpen) this.setState({ changesOpen: false }); else if (this.state.editing) this.guard(() => this.setEdit(false)); };
+  resetDemo() {
+    const db = this.state.db; if (!db) return;
+    clearInterval(this.typeI); clearTimeout(this.thinkT);
+    this.setEdit(false); this.go(null);
+    this.setState({ reports: db.reports.map(r => ({ ...r, refreshed: new Date(r.refreshed) })), selected: {}, menu: null, bulkOpen: false, saveOpen: false, toast: 'Demo reset', toastRest: '. All reports are back to their starting state.' });
+    clearTimeout(this.toastT); this.toastT = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  pulseDrawer() { clearTimeout(this.pulseT); this.setState({ pulse: false }); setTimeout(() => this.setState({ pulse: true }), 0); this.pulseT = setTimeout(() => this.setState({ pulse: false }), 2000); }
+  applyOne(before, p) {
+    const d = structuredClone(before); applyAction(d, p.action); d.applied = [...(d.applied || []), p.id];
+    const flash = this.diff(before, d), m = d.modified || { k: [], c: [], t: false };
+    d.modified = { k: m.k.map((v, i) => v || flash.k[i]).concat(flash.k.slice(m.k.length)), c: [...new Set([...m.c, ...flash.c])], t: m.t || flash.t };
+    const ki = flash.k.findIndex(Boolean);
+    d.changes = [...(d.changes || []), { pid: p.id, label: p.summary || p.label, target: flash.c[0] ? 'c:' + flash.c[0] : flash.t ? 't' : ki >= 0 ? 'k:' + ki : null }];
+    return { d, flash };
+  }
+  undo(pid) {
+    const s = this.state, saved = s.reports.find(r => r.id === s.view), e = s.edit;
+    if (!saved || !e || s.thinking || s.typing) return;
+    const pool = (saved.assistant && saved.assistant.prompts) || [], ch = (e.changes || []).find(c => c.pid === pid);
+    const keep = (e.changes || []).map(c => c.pid).filter(x => x !== pid);
+    let next = saved;
+    keep.forEach(id => { const p = pool.find(q => q.id === id); if (p) next = this.applyOne(next, p).d; });
+    const flash = this.diff(e, next);
+    const msgs = [...s.msgs.map(m => m.pid === pid ? { ...m, undone: true } : m), { role: 'assistant', parts: md('Undid **' + (ch ? ch.label : 'that change') + '**. ' + (keep.length ? 'Your other changes are still in place.' : 'The report is back to its saved state.')), time: new Date() }];
+    this.setState({ edit: keep.length ? next : null, flash, msgs, typing: { k: msgs.length - 1, n: 0 }, showOrig: false, tSort: null, tPage: 0, hover: {}, hidden: {}, changesOpen: false });
+    this.startTyping(); this.scrollToFlash();
+    clearTimeout(this.flashT); this.flashT = setTimeout(() => this.setState({ flash: null }), 1800);
+  }
+  startTyping() {
+    clearInterval(this.typeI);
+    this.typeI = setInterval(() => {
+      const t = this.state.typing; if (!t) return clearInterval(this.typeI);
+      const m = this.state.msgs[t.k], total = m && m.parts ? m.parts.reduce((a, p) => a + p.t.length, 0) : 0;
+      if (t.n >= total) { clearInterval(this.typeI); this.setState({ typing: null }); this.scrollChat(); return; }
+      this.setState({ typing: { k: t.k, n: t.n + 3 } });
+      const el = document.querySelector('[data-ta-transcript]'); if (el) el.scrollTop = el.scrollHeight;
+    }, 18);
+  }
+  scrollToFlash() {
+    setTimeout(() => {
+      const sc = document.querySelector('[data-ta-canvas]'), el = document.querySelector('[data-ta-flash="1"]');
+      if (!sc || !el) return;
+      const a = sc.getBoundingClientRect(), b = el.getBoundingClientRect();
+      if (b.top < a.top + 8 || b.top > a.bottom - 80) sc.scrollTop += b.top - a.top - 24;
+    }, 60);
+  }
+  isDirty() { const e = this.state.edit; return !!(this.state.editing && e && (e.changes || []).length); }
+  guard(fn) { if (this.isDirty()) this.setState({ discard: fn, changesOpen: false }); else fn(); }
+  jumpTo(target) {
+    this.setState({ changesOpen: false });
+    if (!target) return;
+    const fl = { k: [], c: [], t: target === 't' };
+    if (target.startsWith('k:')) fl.k[+target.slice(2)] = true;
+    if (target.startsWith('c:')) fl.c = [target.slice(2)];
+    this.setState({ flash: fl });
+    clearTimeout(this.flashT); this.flashT = setTimeout(() => this.setState({ flash: null }), 1800);
+    setTimeout(() => {
+      const sc = document.querySelector('[data-ta-canvas]'), el = document.querySelector('[data-ta-card="' + target + '"]');
+      if (!sc || !el) return;
+      const a = sc.getBoundingClientRect(), b = el.getBoundingClientRect();
+      sc.scrollTop += b.top - a.top - 24;
+    }, 30);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.measure); window.removeEventListener('keydown', this.onEsc); clearTimeout(this.thinkT); clearTimeout(this.flashT); clearInterval(this.typeI); }
+  sigs(r) {
+    const rows = this.rowsFor(r) || [];
+    return {
+      k: (r.kpis || []).map(k => fmt(agg(rows, k), k.format)),
+      c: Object.fromEntries((r.charts || []).map(sp => [sp.id, JSON.stringify(sp) + '|' + JSON.stringify(chartData(sp, rows))])),
+      t: JSON.stringify([r.table && r.table.columns, r.table && r.table.sort, r.filter, rows.length]),
+    };
+  }
+  diff(a, b) {
+    const x = this.sigs(a), y = this.sigs(b);
+    return { k: y.k.map((v, i) => v !== x.k[i]), c: Object.keys(y.c).filter(id => y.c[id] !== x.c[id]), t: x.t !== y.t };
+  }
+  scrollChat() { const go = () => { const el = document.querySelector('[data-ta-transcript]'); if (el) el.scrollTop = el.scrollHeight; }; requestAnimationFrame(go); setTimeout(go, 60); setTimeout(go, 250); }
+  setEdit(on) { try { on ? localStorage.setItem('ta-edit', '1') : localStorage.removeItem('ta-edit'); } catch (e) {} clearTimeout(this.thinkT); clearInterval(this.typeI); if (on) this.pulseDrawer(); this.setState({ typing: null, showOrig: false, editing: on, drawerMin: false, edit: null, changesOpen: false, discard: null, msgs: [], draft: '', thinking: false, flash: null, promptOffset: 0, fb: {}, chatStart: new Date(), tSort: null, tPage: 0, hover: {}, hidden: {} }); this.remeasure(); }
+  saveEdit() { const d = this.state.edit; if (!d) return; this.setState({ saveOpen: true, saveName: d.name, saveDesc: d.description }); setTimeout(() => { const el = document.querySelector('[data-ta-save-name]'); if (el) { el.focus(); el.select(); } }, 30); }
+  confirmSave() {
+    const d = this.state.edit, name = this.state.saveName.trim(); if (!d || !name) return;
+    const saved = { ...d, name, description: this.state.saveDesc.trim(), refreshed: new Date(), changes: [], modified: null };
+    this.setState(s => ({ reports: s.reports.map(r => r.id === d.id ? saved : r), saveOpen: false, toast: name, toastRest: ' saved.' }));
+    this.setEdit(false);
+    clearTimeout(this.toastT); this.toastT = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  sendDraft() { const t = this.state.draft.trim(); if (!t) return; const cur = this.state.edit || this.state.reports.find(r => r.id === this.state.view); const pool = (cur && cur.assistant && cur.assistant.prompts) || []; this.runPrompt(pool.find(p => matches(p, t.toLowerCase())) || null, t); }
+  runPrompt(p, text) {
+    if (this.state.thinking || this.state.typing) return;
+    this.setState(s => ({ showOrig: false, msgs: [...s.msgs, { role: 'user', text: text || p.label, time: new Date() }], draft: '', thinking: true }));
+    this.scrollChat();
+    clearTimeout(this.thinkT);
+    this.thinkT = setTimeout(() => {
+      this.setState(s => {
+        const saved = s.reports.find(r => r.id === s.view);
+        if (!saved) return { thinking: false };
+        let d = s.edit, reply, flash = null, pid = null;
+        if (!p) reply = FALLBACK;
+        else if (((d || saved).applied || []).includes(p.id)) reply = 'That change is already in the canvas.';
+        else { const r = this.applyOne(d || saved, p); d = r.d; flash = r.flash; reply = p.reply; pid = p.id; }
+        return { edit: d, thinking: false, flash, typing: { k: s.msgs.length, n: 0 }, msgs: [...s.msgs, { role: 'assistant', parts: md(reply), time: new Date(), pid }], tSort: p ? null : s.tSort, tPage: 0, hover: {}, hidden: {}, promptOffset: 0 };
+      });
+      this.scrollChat(); this.startTyping();
+      setTimeout(() => {
+        const sc = document.querySelector('[data-ta-canvas]'), el = document.querySelector('[data-ta-flash="1"]');
+        if (!sc || !el) return;
+        const a = sc.getBoundingClientRect(), b = el.getBoundingClientRect();
+        if (b.top < a.top + 8 || b.top > a.bottom - 80) sc.scrollTop += b.top - a.top - 24;
+      }, 60);
+      clearTimeout(this.flashT); this.flashT = setTimeout(() => this.setState({ flash: null }), 1800);
+    }, 900);
+  }
+  measure = () => { const el = document.querySelector('[data-ta-canvas]'); const w = el ? el.clientWidth : window.innerWidth; if (Math.abs(w - (this.state.cw || 0)) > 1) this.setState({ cw: w }); };
+  remeasure() { [0, 120, 360].forEach(t => setTimeout(this.measure, t)); }
+  componentDidMount() {
+    window.addEventListener('resize', this.measure); this.remeasure();
+    window.addEventListener('keydown', this.onEsc);
+    Promise.all(DATA_FILES.map(p => fetch(p).then(r => r.json()))).then(parts => {
+      const db = Object.assign({}, ...parts);
+      this.remeasure();
+      this.setState({ db, reports: db.reports.map(r => ({ ...r, refreshed: new Date(r.refreshed) })) });
+    }).catch(e => console.error('Mock DB load failed', e));
+  }
+  go(view, edit) { if (edit) this.pulseDrawer(); this.setState({ xf: null }); try { view ? localStorage.setItem('ta-view', view) : localStorage.removeItem('ta-view'); edit ? localStorage.setItem('ta-edit', '1') : localStorage.removeItem('ta-edit'); } catch (e) {} this.setState({ view, menu: null, hover: {}, hidden: {}, tSort: null, tPage: 0, editing: !!edit, drawerMin: false, msgs: [], draft: '', edit: null, thinking: false, flash: null, promptOffset: 0, fb: {}, chatStart: new Date() }); window.scrollTo(0, 0); }
+  setHover(i, v) { if (this.state.hover[i] !== v) this.setState(s => ({ hover: { ...s.hover, [i]: v } })); }
+  toggleHidden(i, name, all) {
+    this.setState(s => {
+      const h = { ...(s.hidden[i] || {}), [name]: !(s.hidden[i] || {})[name] };
+      return all.every(n => h[n]) ? null : { hidden: { ...s.hidden, [i]: h }, hover: { ...s.hover, [i]: null } };
+    });
+  }
+  fmtDate(d) { const p = n => String(n).padStart(2, '0'); return `${p(d.getMonth() + 1)}/${p(d.getDate())}/${d.getFullYear()} ${p(d.getHours() % 12 || 12)}:${p(d.getMinutes())}:${p(d.getSeconds())} ${d.getHours() < 12 ? 'AM' : 'PM'}`; }
+  fmtLong(d) { return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()} ${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, '0')} ${d.getHours() < 12 ? 'AM' : 'PM'}`; }
+  rowsFor(r) { const db = this.state.db; const rows = r && r.dataset && db ? db[r.dataset] || null : null; return rows && r.filter ? where(rows, r.filter) : rows; }
+  remove(ids) { this.setState(s => ({ reports: s.reports.filter(r => !ids.includes(r.id)), selected: {}, menu: null, bulkOpen: false })); }
+  refresh(ids) { const now = new Date(); this.setState(s => ({ reports: s.reports.map(r => ids.includes(r.id) ? { ...r, refreshed: now } : r), menu: null, bulkOpen: false })); }
+  csv(r) {
+    const data = this.rowsFor(r), cols = r.table ? r.table.columns : [];
+    const esc = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : v;
+    const lines = data ? [cols.map(c => c.label), ...data.map(v => cols.map(c => esc(c.format === 'appVm' ? v.app + ' · ' + v.vm : v[c.key])))] : [['No Data Available']];
+    const blob = new Blob(['\ufeff' + lines.map(x => x.join(',')).join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = r.name.replace(/[^\w]+/g, '_') + '.csv'; a.click();
+    this.setState({ menu: null, dlOpen: false });
+  }
+  selOf(sp) { const x = this.state.xf; return this.xfOn && x && x.chartId === sp.id ? x : null; }
+  pick(sp, w, value) {
+    if (!this.xfOn) return;
+    const x = this.state.xf, same = x && x.chartId === sp.id && JSON.stringify(x.where) === JSON.stringify(w);
+    const keys = Object.keys(w);
+    this.setState({ xf: same ? null : { chartId: sp.id, where: w, field: keys.map(k => XF_FIELDS[k] || k).join(' · '), value }, tPage: 0, hover: {} });
+  }
+  featureVals() {
+    const fsd = (this.state.db && this.state.db.featureSummary) || { title: '', description: '', groups: [] };
+    let n = 0;
+    const groups = fsd.groups.map(g => ({ title: g.title, scope: g.scope, count: g.items.length, scopeBg: g.scope === 'All reports' ? '#b0d7fa' : '#e6e9f3', items: g.items.map(it => ({ ...it, n: ++n })) }));
+    return { fs: fsd, fsGroups: groups, fsStats: [{ label: 'NEW FEATURES', value: n }, ...groups.map(g => ({ label: g.title.toUpperCase(), value: g.count }))] };
+  }
+  pie(sp, i, rows) {
+    const sel = this.selOf(sp), selV = sel ? sel.where[sp.groupBy] : null;
+    const pieHover = this.state.hover[i], hd = this.state.hidden[i] || {};
+    let grouped = groupSum(rows, sp.groupBy, sp.sum);
+    if (sp.top && grouped.length > sp.top) grouped = [...grouped.slice(0, sp.top), { name: 'Other', v: Math.round(grouped.slice(sp.top).reduce((x, g) => x + g.v, 0) * 10) / 10, other: true }];
+    const data = grouped.map((d, k) => ({ ...d, color: d.other ? '#a9b2bc' : CHART[k % 10] }));
+    const vf = v => sp.format ? fmt(v, sp.format) : v + ' ' + (sp.unit || '');
+    const W = 460, cx = 230, cy = 120, r = 82, unit = sp.unit || '';
+    const vis = data.filter(p => !hd[p.name]);
+    const total = vis.reduce((a, p) => a + p.v, 0);
+    const pt = (a, rr) => [cx + rr * Math.sin(a), cy - rr * Math.cos(a)];
+    let a = 0;
+    const slices = vis.map(p => {
+      const a0 = a, a1 = a + (p.v / total) * Math.PI * 2; a = a1;
+      const m = (a0 + a1) / 2;
+      let d;
+      const r0 = sp.donut ? r * 0.6 : 0;
+      if (r0 && a1 - a0 > Math.PI * 2 - 1e-6) d = `M${cx},${cy - r}A${r},${r} 0 1 1 ${cx},${cy + r}A${r},${r} 0 1 1 ${cx},${cy - r}ZM${cx},${cy - r0}A${r0},${r0} 0 1 0 ${cx},${cy + r0}A${r0},${r0} 0 1 0 ${cx},${cy - r0}Z`;
+      else if (r0) { const lg = a1 - a0 > Math.PI ? 1 : 0, [x0, y0] = pt(a0, r), [x1, y1] = pt(a1, r), [u1, v1] = pt(a1, r0), [u0, v0] = pt(a0, r0); d = `M${x0},${y0}A${r},${r} 0 ${lg} 1 ${x1},${y1}L${u1},${v1}A${r0},${r0} 0 ${lg} 0 ${u0},${v0}Z`; }
+      else if (a1 - a0 > Math.PI * 2 - 1e-6) d = `M${cx},${cy - r}A${r},${r} 0 1 1 ${cx},${cy + r}A${r},${r} 0 1 1 ${cx},${cy - r}Z`;
+      else { const [x0, y0] = pt(a0, r), [x1, y1] = pt(a1, r); d = `M${cx},${cy}L${x0},${y0}A${r},${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1},${y1}Z`; }
+      return { p, m, d, right: Math.sin(m) >= 0, ky: pt(m, r + 12)[1] };
+    });
+    [true, false].forEach(side => {
+      const g = slices.filter(s => s.right === side).sort((x, y) => x.ky - y.ky);
+      g.forEach((s, j) => { s.ly = j ? Math.max(s.ky, g[j - 1].ly + 16) : s.ky; });
+    });
+    const out = slices.map(s => {
+      const [ex, ey] = pt(s.m, r), [kx] = pt(s.m, r + 12);
+      const lx = s.right ? cx + r + 30 : cx - r - 30, hov = pieHover === s.p.name, on = selV === s.p.name;
+      const [ox, oy] = hov || on ? [8 * Math.sin(s.m), -8 * Math.cos(s.m)] : [0, 0];
+      return {
+        d: s.d, color: s.p.color, transform: `translate(${ox} ${oy})`, opacity: pieHover && !hov ? 0.55 : selV && !on ? 0.3 : 1, pick: () => !s.p.other && this.pick(sp, { [sp.groupBy]: s.p.name }, s.p.name),
+        leader: `${ex},${ey} ${kx},${s.ly} ${s.right ? lx - 4 : lx + 4},${s.ly}`,
+        lx, ly: s.ly, anchor: s.right ? 'start' : 'end', label: sp.labelValues === false ? s.p.name : `${s.p.name} - ${vf(s.p.v)}`,
+        enter: () => this.setHover(i, s.p.name),
+      };
+    });
+    const hs = slices.find(s => s.p.name === pieHover);
+    let pieTip = { show: false };
+    if (hs) { const [tx, ty] = pt(hs.m, sp.donut ? r * 0.8 : r * 0.55); pieTip = { show: true, left: (tx / W * 100) + '%', top: (ty / 240 * 100) + '%', color: hs.p.color, name: hs.p.name, value: `${vf(hs.p.v)} (${(hs.p.v / total * 100).toFixed(1)}%)` }; }
+    const names = data.map(p => p.name);
+    return {
+      isPie: true, slices: out, pieTip,
+      labels: [...out.map(p => lbl(p.lx, p.ly, W, 240, p.anchor, p.label, '11px', 400, '#111925')), ...(sp.donut ? [lbl(cx, cy - 8, W, 240, 'middle', n0(total), '22px', 600, '#111925'), lbl(cx, cy + 14, W, 240, 'middle', sp.centerLabel || '', '11px', 400, '#4d5765')] : [])],
+      legend: data.map(p => ({
+        name: `${p.name} - ${vf(p.v)}`, swatch: hd[p.name] ? '#cbd4da' : p.color,
+        text: hd[p.name] || (pieHover && pieHover !== p.name) ? '#a9b2bc' : '#4d5765',
+        toggle: () => this.toggleHidden(i, p.name, names),
+        enter: () => !hd[p.name] && this.setHover(i, p.name),
+      })),
+    };
+  }
+  bar(sp, i, rows) {
+    const hv = this.state.hover[i], sel = this.selOf(sp), bk = sp.groupBy || (!sp.buckets && sp.label), selV = sel && bk ? sel.where[bk] : null, can = this.xfOn && !!bk;
+    const bx = d => ({ op: selV && selV !== d.label ? 0.3 : 1, cursor: can ? 'pointer' : 'default', pick: () => can && this.pick(sp, { [bk]: d.label }, d.label) });
+    const data = sp.groupBy ? groupSum(rows, sp.groupBy, sp.sum).map(g => ({ label: g.name, v: g.v })).slice(0, sp.limit || 99) : sp.buckets ? bucketCount(rows, sp.field, sp.buckets) : topN(rows, sp.label, sp.value, sp.limit || 8);
+    const mx = niceMax(Math.max(...data.map(d => d.v)));
+    const ticks = sp.ticks || (sp.horizontal ? [0, mx / 4, mx / 2, mx * 3 / 4, mx] : [0, mx / 2, mx]), max = ticks[ticks.length - 1];
+    const tf = v => sp.tickFormat ? FMT[sp.tickFormat](v) : v;
+    const W = 460, labels = [], bars = [], grid = [];
+    let H;
+    if (sp.horizontal) {
+      H = sp.height || 240;
+      const L = 86, R = 446, T = 6, B = H - 22, PW = R - L, band = (B - T) / data.length, bh = band * 0.6;
+      ticks.forEach(t => { const x = L + t / max * PW; grid.push({ x1: x, x2: x, y1: T, y2: B, stroke: t === 0 ? '#cbd4da' : '#f1f3f4' }); labels.push(lbl(x, B + 12, W, H, 'middle', tf(t))); });
+      data.forEach((d, j) => {
+        const y = T + band * j + (band - bh) / 2, w = d.v / max * PW, cy = y + bh / 2;
+        bars.push({ x: L, y, w, h: bh, hx: L, hy: T + band * j, hw: PW, hh: band, fill: hv === j ? '#1e4a93' : '#012cad', enter: () => this.setHover(i, j), ...bx(d) });
+        labels.push(lbl(L - 8, cy, W, H, 'end', d.label, '12px', 400, '#4d5765'));
+        if (hv === j) labels.push(lbl(L + w + 6, cy, W, H, 'start', fmt(d.v, sp.format), '12px', 600, '#111925'));
+      });
+    } else {
+      H = sp.height || 200;
+      const L = 44, R = 452, T = 10, B = H - 30, PH = B - T, band = (R - L) / data.length;
+      ticks.forEach(t => { const y = B - t / max * PH; grid.push({ x1: L, x2: R, y1: y, y2: y, stroke: '#dee3e7' }); labels.push(lbl(34, y, W, H, 'end', tf(t))); });
+      data.forEach((d, j) => {
+        const h = d.v / max * PH, cx = L + band * j + band / 2;
+        bars.push({ x: cx - 20, y: B - h, w: 40, h, hx: L + band * j, hy: T, hw: band, hh: PH, fill: hv === j ? '#1e4a93' : '#012cad', enter: () => this.setHover(i, j), ...bx(d) });
+        labels.push(lbl(cx, B + 18, W, H, 'middle', d.label));
+        if (hv === j) labels.push(lbl(cx, B - h - 8, W, H, 'middle', fmt(d.v, sp.format), '12px', 600, '#111925'));
+      });
+    }
+    return { isBar: true, viewBox: `0 0 ${W} ${H}`, grid, bars, labels };
+  }
+  line(sp, i) {
+    const hv = this.state.hover[i], hd = this.state.hidden[i] || {};
+    const data = this.state.db[sp.source] || [];
+    const W = sp.vw || 460, H = sp.height || 200, L = 44, R = W - 8, T = 10, B = H - 30, PH = B - T;
+    const all = sp.series.map((s, k) => ({ ...s, name: s.name || s.key, color: s.color || CHART[k % 10] }));
+    const vis = all.filter(s => !hd[s.name]);
+    const mx = niceMax(Math.max(...data.flatMap(d => all.map(s => d[s.key]))));
+    const ticks = sp.ticks || [0, mx / 2, mx], max = ticks[ticks.length - 1];
+    const step = (R - L - 16) / Math.max(data.length - 1, 1);
+    const X = j => L + 8 + step * j, Y = v => B - v / max * PH;
+    const xl = data.map(d => fmtX(d[sp.x], sp.xFormat));
+    const show = hv != null && vis.length > 0 && !!data[hv];
+    const px = show ? X(hv) / W * 100 : 0;
+    const names = all.map(s => s.name);
+    return {
+      isLine: true, viewBox: `0 0 ${W} ${H}`,
+      grid: ticks.map(t => ({ x1: L, x2: R, y1: Y(t), y2: Y(t), stroke: '#dee3e7' })),
+      areas: sp.area ? vis.map(s => ({ color: s.color, points: X(0) + ',' + B + ' ' + data.map((d, j) => X(j) + ',' + Y(d[s.key])).join(' ') + ' ' + X(data.length - 1) + ',' + B })) : [],
+      series: vis.map(s => ({ color: s.color, w: all.length > 2 ? 1.5 : 2, points: data.map((d, j) => X(j) + ',' + Y(d[s.key])).join(' ') })),
+      cross: { show, x: show ? X(hv) : 0, y1: T, y2: B },
+      dots: show ? vis.map(s => ({ cx: X(hv), cy: Y(data[hv][s.key]), color: s.color })) : [],
+      zones: data.map((d, j) => ({ x: X(j) - step / 2, y: T, w: step, h: PH, enter: () => this.setHover(i, j) })),
+      labels: [...ticks.map(t => lbl(34, Y(t), W, H, 'end', sp.tickFormat ? FMT[sp.tickFormat](t) : n0(t))), ...xl.map((l, j) => ({ l, j })).filter(o => !sp.xEvery || o.j % sp.xEvery === 0).map(o => lbl(X(o.j), B + 18, W, H, 'middle', o.l))],
+      lineTip: show ? { show: true, left: px + '%', tf: px > 60 ? 'translateX(calc(-100% - 10px))' : 'translateX(10px)', title: xl[hv], rows: vis.map(s => ({ color: s.color, name: s.name, value: fmt(data[hv][s.key], s.format || sp.format) })) } : { show: false, rows: [] },
+      legend: all.map(s => ({ name: s.name, swatch: hd[s.name] ? '#cbd4da' : s.color, text: hd[s.name] ? '#a9b2bc' : '#4d5765', toggle: () => this.toggleHidden(i, s.name, names) })),
+    };
+  }
+  kpiExtras(k) {
+    const ser = k.spark && this.state.db && this.state.db[k.spark.source];
+    if (!ser || !ser.length) return { hasSpark: false, hasDelta: false };
+    const vals = ser.map(d => d[k.spark.y]), pts = sparkPts(vals, 100, 32, 3);
+    const first = vals[0], last = vals[vals.length - 1], diff = last - first;
+    let dText = '', dColor = '#4d5765';
+    if (k.delta) {
+      dText = (diff > 0 ? '▲ ' : diff < 0 ? '▼ ' : '') + (k.delta.mode === 'abs' ? (diff > 0 ? '+' : '') + diff : Math.abs(diff / (first || 1) * 100).toFixed(1) + '%');
+      if (k.delta.goodWhen && diff !== 0) dColor = (diff < 0) === (k.delta.goodWhen === 'down') ? '#498128' : '#da1e21';
+    }
+    return { hasSpark: true, sparkPts: pts.map(p => p.join(',')).join(' '), sparkArea: '0,32 ' + pts.map(p => p.join(',')).join(' ') + ' 100,32', hasDelta: !!k.delta, dText, dColor, dLabel: k.delta ? k.delta.label : '' };
+  }
+  cell(r, c) {
+    const v = r[c.key], base = { isText: false, isPill: false, isSpark: false };
+    if (c.format === 'spark' && Array.isArray(v)) { const pts = sparkPts(v, 100, 24, 2); return { ...base, isSpark: true, points: pts.map(p => p.join(',')).join(' '), endY: pts[pts.length - 1][1], color: '#012cad' }; }
+    if (c.format === 'status') return { ...base, isPill: true, v, bg: STATUS_BG[v] || '#dee3e7' };
+    if (c.warn != null && typeof v === 'number') {
+      const lvl = c.lowIsBad ? (v < c.crit ? 2 : v < c.warn ? 1 : 0) : (v >= c.crit ? 2 : v >= c.warn ? 1 : 0);
+      if (lvl) return { ...base, isPill: true, v: fmt(v, c.format, r), bg: lvl === 2 ? '#fccdce' : '#ffe1a1' };
+    }
+    return { ...base, isText: true, v: fmt(v, c.format, r) };
+  }
+  gauge(sp, rows) {
+    const num = agg(rows, sp.num), den = agg(rows, sp.den) || 1, v = num / den * 100;
+    const color = v >= sp.crit ? '#da1e21' : v >= sp.warn ? '#f88402' : '#0067c5';
+    const cx = 120, cy = 124, r = 96;
+    const tick = t => { const a = Math.PI * t / 100; return { x1: cx - (r - 15) * Math.cos(a), y1: cy - (r - 15) * Math.sin(a), x2: cx - (r + 15) * Math.cos(a), y2: cy - (r + 15) * Math.sin(a) }; };
+    return {
+      isGauge: true, gBg: arcPath(cx, cy, r, 0, 1), gVal: arcPath(cx, cy, r, 0, Math.min(v / 100, 1)), gColor: color,
+      gTicks: [{ ...tick(sp.warn), color: '#f88402' }, { ...tick(sp.crit), color: '#da1e21' }],
+      labels: [lbl(cx, cy - 22, 240, 136, 'middle', v.toFixed(1) + '%', '30px', 600, '#111925'), lbl(cx - r, cy + 12, 240, 136, 'middle', '0'), lbl(cx + r, cy + 12, 240, 136, 'middle', '100')],
+      gCaption: n0(num) + ' of ' + n0(den) + ' ' + (sp.unit || '') + ' used',
+      gLegend: [{ name: 'Normal', color: '#0067c5' }, { name: 'Warning ≥' + sp.warn + '%', color: '#f88402' }, { name: 'Critical ≥' + sp.crit + '%', color: '#da1e21' }],
+    };
+  }
+  stacked(sp, i, rows) {
+    const sel = this.selOf(sp);
+    const hv = this.state.hover[i], hd = this.state.hidden[i] || {};
+    const cats = sp.order.map((name, k) => ({ name, color: sp.colors[k] })), vis = cats.filter(c => !hd[c.name]);
+    const groups = [...new Set(rows.map(r => r[sp.groupBy]))].map(g => {
+      const gr = rows.filter(r => r[sp.groupBy] === g);
+      const counts = Object.fromEntries(cats.map(c => [c.name, gr.filter(r => r[sp.stackBy] === c.name).length]));
+      return { g, counts, total: vis.reduce((a, c) => a + counts[c.name], 0) };
+    }).sort((a, b) => b.total - a.total || String(a.g).localeCompare(b.g));
+    const max = Math.max(1, ...groups.map(x => x.total));
+    const names = cats.map(c => c.name);
+    return {
+      isStacked: true,
+      sRows: groups.map(x => ({ label: x.g, total: x.total, segs: vis.filter(c => x.counts[c.name]).map(c => {
+        const key = x.g + '|' + c.name;
+        return { w: (x.counts[c.name] / max * 100) + '%', color: c.color, txt: x.counts[c.name], title: x.g + ' · ' + c.name + ': ' + x.counts[c.name], op: hv && hv !== key ? 0.55 : sel && sel.where[sp.groupBy] + '|' + sel.where[sp.stackBy] !== key ? 0.3 : 1, pick: () => this.pick(sp, { [sp.groupBy]: x.g, [sp.stackBy]: c.name }, x.g + ' · ' + c.name), enter: () => this.setHover(i, key) };
+      }) })),
+      legend: cats.map(c => ({ name: c.name, count: rows.filter(r => r[sp.stackBy] === c.name).length, swatch: hd[c.name] ? '#cbd4da' : c.color, text: hd[c.name] ? '#a9b2bc' : '#4d5765', countColor: hd[c.name] ? '#a9b2bc' : '#111925', toggle: () => this.toggleHidden(i, c.name, names) })),
+    };
+  }
+  bullets(sp, rows) {
+    const max = sp.max || 100, p = v => (v / max * 100) + '%', sel = this.selOf(sp), selV = sel ? sel.where[sp.label] : null;
+    return {
+      isBullets: true,
+      bRows: topN(rows, sp.label, sp.value, sp.limit || 6).map(d => ({ label: d.label, op: selV && selV !== d.label ? 0.35 : 1, title: 'Filter report to ' + d.label, pick: () => this.pick(sp, { [sp.label]: d.label }, d.label), w: p(Math.min(d.v, max)), text: d.v + '%', color: d.v >= sp.crit ? '#da1e21' : d.v >= sp.warn ? '#f88402' : '#0067c5', warnL: p(sp.warn), warnW: p(sp.crit - sp.warn), critL: p(sp.crit) })),
+      bTicks: [0, 25, 50, 75, 100].map(t => ({ left: t + '%', text: t })),
+    };
+  }
+  reportVals(cur, rows) {
+    const { tPage, flash } = this.state;
+    const dsort = (cur && cur.table && cur.table.sort) || {};
+    const tSort = this.state.tSort || dsort.key || null, tDesc = this.state.tSort ? this.state.tDesc : !!dsort.desc;
+    if (!rows) return { kpis: [], charts: [], tCols: [], tRows: [], tGrid: '1fr', chartMin: '340px', xfActive: false, xfHint: false };
+    this.xfOn = !!cur.crossFilter;
+    const xf = this.xfOn ? this.state.xf : null, all = rows;
+    if (xf) rows = where(rows, xf.where);
+    const rowsFor = sp => xf && xf.chartId === sp.id ? all : rows;
+    const cn = cur.chartColumns || 3, avail = Math.max(0, (this.state.cw || window.innerWidth) - 44);
+    const trackMin = Math.max(340, (avail - (cn - 1) * 16) / cn), fitCols = Math.max(1, Math.floor((avail + 16) / (trackMin + 16)));
+    const charts = (cur.charts || []).map((sp, i) => ({
+      title: sp.title, subtitle: sp.subtitle || '', hasSubtitle: !!sp.subtitle,
+      isPie: false, isBar: false, isLine: false, isGauge: false, isStacked: false, isBullets: false, areas: [], gTicks: [], gLegend: [], sRows: [], bRows: [], bTicks: [],
+      gridCol: sp.span === 'full' ? '1 / -1' : sp.span && fitCols > 1 ? 'span ' + Math.min(sp.span, fitCols) : 'auto', labels: [], legend: [], pieTip: { show: false }, lineTip: { show: false, rows: [] }, cross: { show: false },
+      leave: () => this.setHover(i, null),
+      id: sp.id, mod: !!(cur.modified && cur.modified.c.includes(sp.id)), border: cur.modified && cur.modified.c.includes(sp.id) ? '#0067c5' : '#dee3e7',
+      ring: flash && flash.c.includes(sp.id) ? RING : SHADOW, fl: flash && flash.c.includes(sp.id) ? '1' : '0',
+      xfNote: !!xf && sp.type === 'line',
+      ...(sp.type === 'pie' ? this.pie(sp, i, rowsFor(sp)) : sp.type === 'bar' ? this.bar(sp, i, rowsFor(sp)) : sp.type === 'gauge' ? this.gauge(sp, rows) : sp.type === 'stacked' ? this.stacked(sp, i, rowsFor(sp)) : sp.type === 'bullets' ? this.bullets(sp, rowsFor(sp)) : this.line(sp, i)),
+    }));
+    const cols = cur.table.columns;
+    const sc = cols.find(c => c.key === tSort);
+    const sv = r => { const v = sc.format === 'appVm' ? r.app + ' ' + r.vm : r[sc.key]; return Array.isArray(v) ? v[v.length - 1] : v; };
+    const sorted = sc ? [...rows].sort((a, b) => { const x = sv(a), y = sv(b); const d = typeof x === 'number' ? x - y : String(x).localeCompare(y); return tDesc ? -d : d; }) : rows;
+    const pages = Math.ceil(sorted.length / PAGE), pg = Math.min(tPage, pages - 1);
+    return {
+      xfActive: !!xf, xfHint: this.xfOn && !xf, xfField: xf ? xf.field : '', xfValue: xf ? xf.value : '', clearXf: () => this.setState({ xf: null, tPage: 0 }),
+      kpis: cur.kpis.map((k, i) => ({ label: k.label, value: fmt(agg(rows, k), k.format), ...(xf ? { hasSpark: false, hasDelta: false } : this.kpiExtras(k)), mod: !!(cur.modified && cur.modified.k[i]), border: cur.modified && cur.modified.k[i] ? '#0067c5' : '#dee3e7', ring: flash && flash.k[i] ? RING : SHADOW, fl: flash && flash.k[i] ? '1' : '0' })),
+      tMod: !!(cur.modified && cur.modified.t), tBorder: cur.modified && cur.modified.t ? '#0067c5' : '#dee3e7',
+      tRing: flash && flash.t ? RING : SHADOW, tFl: flash && flash.t ? '1' : '0',
+      hasFilter: !!cur.filter, filterLabel: cur.filterLabel || '',
+      charts, chartMin: `calc((100% - ${(cn - 1) * 16}px) / ${cn})`,
+      tGrid: cols.map(c => `minmax(0,${c.w || 1}fr)`).join(' '), tMinW: (cols.reduce((a, c) => a + (c.w || 1) * 90, 0) + (cols.length - 1) * 16 + 16) + 'px',
+      tCols: cols.map(c => ({ label: c.label, arrow: tSort === c.key ? (tDesc ? '▼' : '▲') : '', sort: () => this.setState(s => ({ tSort: c.key, tDesc: s.tSort === c.key ? !s.tDesc : false, tPage: 0 })) })),
+      tRows: sorted.slice(pg * PAGE, pg * PAGE + PAGE).map(r => ({ cells: cols.map(c => this.cell(r, c)) })),
+      tRange: `${pg * PAGE + 1}–${Math.min(pg * PAGE + PAGE, sorted.length)} of ${sorted.length.toLocaleString('en-US')}`,
+      tPrevDisabled: pg === 0, tNextDisabled: pg >= pages - 1,
+      tPrevColor: pg === 0 ? '#cbd4da' : '#4d5765', tNextColor: pg >= pages - 1 ? '#cbd4da' : '#4d5765',
+      tPrev: () => this.setState({ tPage: Math.max(0, pg - 1) }),
+      tNext: () => this.setState({ tPage: Math.min(pages - 1, pg + 1) }),
+    };
+  }
+  renderVals() {
+    const { db, reports, selected, query, sortDesc, menu, bulkOpen, dlOpen, view, spinning } = this.state;
+    const q = query.trim().toLowerCase();
+    const list = reports
+      .filter(r => !q || (r.name + ' ' + r.description + ' ' + r.owner).toLowerCase().includes(q))
+      .sort((a, b) => sortDesc === null ? 0 : sortDesc ? b.refreshed - a.refreshed : a.refreshed - b.refreshed);
+    const selIds = Object.keys(selected).filter(k => selected[k]);
+    const allChecked = list.length > 0 && list.every(r => selected[r.id]);
+    const saved = reports.find(r => r.id === view);
+    const cur = saved && this.state.editing && !this.state.showOrig && this.state.edit && this.state.edit.id === saved.id ? this.state.edit : saved;
+    const isReport = !!cur, rows = this.rowsFor(cur);
+    const { editing, drawerMin, msgs, draft, composerFocus, thinking, promptOffset, fb, copied, chatStart, edit, typing, showOrig } = this.state;
+    const liveChanges = (edit && edit.changes) || [];
+    const ed = isReport && editing;
+    const intro = { role: 'assistant', time: chatStart, parts: [{ t: 'What would you like to change in ' }, { t: cur ? cur.name : '', w: 600 }, { t: '? I can add or remove columns, switch or add charts, filter the rows, or rename it. Changes show in the canvas, and nothing is kept until you save the report.' }] };
+    const chat = [intro, ...msgs.map((m, j) => {
+      let parts = m.parts || [{ t: m.text }];
+      const isTyping = !!(typing && typing.k === j);
+      if (isTyping) { let left = typing.n; parts = parts.map(p => { const t = p.t.slice(0, Math.max(0, left)); left -= p.t.length; return { ...p, t }; }).filter(p => p.t); if (!parts.length) parts = [{ t: '' }]; }
+      return { role: m.role, time: m.time, parts, pid: m.pid, undone: m.undone, isTyping };
+    })].map((m, k) => {
+      const u = m.role === 'user', v = fb[k], txt = m.parts.map(p => p.t).join('');
+      return {
+        align: u ? 'flex-end' : 'stretch', maxW: u ? '85%' : 'none', bg: u ? '#f1f3f4' : 'transparent', pad: u ? '10px 14px' : '0',
+        parts: m.parts.map(p => ({ t: p.t, w: p.w || 400 })), isAssistant: !u, showActions: !u && !m.isTyping, time: m.time ? hhmm(m.time) : '',
+        canUndo: !!(m.pid && !m.undone && liveChanges.some(c => c.pid === m.pid)) && !thinking && !typing, undone: !!m.undone, undo: () => this.undo(m.pid),
+        copied: copied === k, notCopied: copied !== k,
+        copy: () => { try { navigator.clipboard.writeText(txt); } catch (e) {} this.setState({ copied: k }); clearTimeout(this.copyT); this.copyT = setTimeout(() => this.setState({ copied: null }), 1500); },
+        upFill: v === 'up' ? '#0067c5' : 'none', upStroke: v === 'up' ? '#0067c5' : '#858c95',
+        downFill: v === 'down' ? '#0067c5' : 'none', downStroke: v === 'down' ? '#0067c5' : '#858c95',
+        up: () => this.setState(s => ({ fb: { ...s.fb, [k]: s.fb[k] === 'up' ? null : 'up' } })),
+        down: () => this.setState(s => ({ fb: { ...s.fb, [k]: s.fb[k] === 'down' ? null : 'down' } })),
+      };
+    });
+    const applied = [...((saved && saved.applied) || []), ...((edit && edit.applied) || [])];
+    const pool = ((cur && cur.assistant && cur.assistant.prompts) || []).filter(p => !applied.includes(p.id));
+    const off = pool.length ? promptOffset % pool.length : 0;
+    const prompts = [...pool.slice(off), ...pool.slice(0, off)].slice(0, 3).map(p => ({ label: p.label, run: () => this.runPrompt(p) }));
+    const changes = (ed && edit && edit.changes) || [], dirty = changes.length > 0;
+    const changeItems = changes.map((ch, n) => ({ n: n + 1, label: ch.label, hint: ch.target ? 'Show' : 'Removed', hintColor: ch.target ? '#0067c5' : '#858c95', cursor: ch.target ? 'pointer' : 'default', go: () => this.jumpTo(ch.target) }));
+    const canSend = !!draft.trim();
+    return {
+      editing: ed, notEditing: !ed, drawerMin: ed && drawerMin,
+      rowH: ed ? 'calc(100vh - 67px)' : 'auto', rowFlex: ed ? '0 0 auto' : '1 1 auto', leftOverflow: ed ? 'auto' : 'visible',
+      drawerW: ed ? (drawerMin ? '48px' : '420px') : '0px', drawerBorder: ed ? '1px solid #dee3e7' : '0 solid transparent',
+      panelOpacity: ed && !drawerMin ? 1 : 0, panelPE: ed && !drawerMin ? 'auto' : 'none',
+      chat, tRef: this.tRef, draft, thinking, prompts, showPrompts: !thinking && !typing && prompts.length > 0,
+      showOrig, origTrack: showOrig ? '#0067c5' : '#a9b2bc', origKnob: showOrig ? '14px' : '2px', origBanner: ed && showOrig && dirty,
+      toggleOrig: () => this.setState(st => ({ showOrig: !st.showOrig, flash: null, changesOpen: false })),
+      drawerAnim: ed && this.state.pulse ? 'ta-edge 1.6s ease-out .3s both' : 'none', sparkAnim: ed && this.state.pulse ? 'ta-spark .7s ease-in-out .4s 2' : 'none',
+      titleClick: e => { if (e.detail === 3) this.resetDemo(); }, toastRest: this.state.toastRest,
+      thinkingEl: thinking ? React.createElement('div', { style: { display: 'flex', gap: 5 } }, [0, 1, 2].map(k => React.createElement('span', { key: k, style: { width: 6, height: 6, borderRadius: '50%', background: '#858c95', animation: 'ta-dot 1s ' + (k * 0.15) + 's infinite ease-in-out' } }))) : null,
+      morePrompts: () => this.setState(s => ({ promptOffset: s.promptOffset + 3 })),
+      dirty, saveDisabled: !dirty, saveBg: dirty ? '#0067c5' : '#f1f3f4', saveFg: dirty ? '#fff' : '#a9b2bc',
+      saveEdit: () => this.saveEdit(), cancelEdit: () => this.guard(() => this.setEdit(false)),
+      changeItems, changeN: changes.length, changeWord: changes.length === 1 ? 'unsaved change' : 'unsaved changes',
+      changesOpen: this.state.changesOpen, chgBg: this.state.changesOpen ? '#dfeffd' : 'transparent',
+      canvasScroll: () => this.state.changesOpen && this.setState({ changesOpen: false }),
+      toggleChanges: () => {
+        if (this.state.changesOpen) return this.setState({ changesOpen: false });
+        const b = document.querySelector('[data-ta-chg]'), sc = document.querySelector('[data-ta-canvas]');
+        if (!b || !sc) return this.setState({ changesOpen: true });
+        const br = b.getBoundingClientRect(), cr = sc.getBoundingClientRect();
+        const w = Math.min(340, cr.width - 24), left = Math.max(cr.left + 12, Math.min(br.right - w, cr.right - 12 - w));
+        this.setState({ changesOpen: true, chgPos: { top: br.bottom + 4, left, w } });
+      },
+      chgTop: ((this.state.chgPos || {}).top || 0) + 'px', chgLeft: ((this.state.chgPos || {}).left || 0) + 'px', chgW: ((this.state.chgPos || {}).w || 340) + 'px',
+      discardOpen: !!this.state.discard,
+      keepEditing: () => this.setState({ discard: null }),
+      confirmDiscard: () => { const fn = this.state.discard; this.setState({ discard: null }); fn && fn(); },
+      saveOpen: this.state.saveOpen, saveName: this.state.saveName, saveDesc: this.state.saveDesc, toast: this.state.toast,
+      nameError: !this.state.saveName.trim(), nameBorder: this.state.saveName.trim() ? '#cbd4da' : '#da1e21',
+      confirmBg: this.state.saveName.trim() ? '#0067c5' : '#f1f3f4', confirmFg: this.state.saveName.trim() ? '#fff' : '#a9b2bc',
+      onSaveName: e => this.setState({ saveName: e.target.value }), onSaveDesc: e => this.setState({ saveDesc: e.target.value }),
+      onSaveKey: e => { if (e.key === 'Enter') { e.preventDefault(); this.confirmSave(); } },
+      closeSave: () => this.setState({ saveOpen: false }), confirmSave: () => this.confirmSave(),
+      closeToast: () => this.setState({ toast: null }),
+      composerBorder: composerFocus ? '#0067c5' : '#cbd4da', sendColor: canSend ? '#0067c5' : '#a9b2bc', sendDisabled: !canSend,
+      openEdit: () => this.setEdit(true), closeEdit: () => this.guard(() => this.setEdit(false)),
+      minimize: () => { this.setState({ drawerMin: true }); this.remeasure(); }, expand: () => { this.setState({ drawerMin: false }); this.remeasure(); },
+      newChat: () => this.setState({ msgs: [], draft: '' }),
+      dlChat: () => {
+        const txt = chat.map(m => (m.align === 'flex-end' ? 'You: ' : 'AI assistant: ') + m.parts.map(p => p.t).join('')).join('\n\n');
+        const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain' })); a.download = 'AI_assistant_conversation.txt'; a.click();
+      },
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onKey: e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendDraft(); } },
+      onFocus: () => this.setState({ composerFocus: true }), onBlur: () => this.setState({ composerFocus: false }),
+      send: () => this.sendDraft(),
+      isList: !isReport && !!db && view !== 'features', isReport, isFeatures: !isReport && !!db && view === 'features',
+      goFeatures: e => { e.stopPropagation(); this.guard(() => this.go('features')); },
+      fsOpenReport: () => this.go('health'), fsOpenEdit: () => this.go('health', true),
+      ...this.featureVals(), hasData: !!rows, noData: isReport && !rows,
+      current: cur ? { ...cur, refreshedLong: this.fmtLong(cur.refreshed) } : {},
+      ...this.reportVals(cur, rows),
+      goList: e => { e.preventDefault(); this.guard(() => this.go(null)); },
+      refreshCurrent: () => { this.refresh([cur.id]); this.setState({ spinning: true }); setTimeout(() => this.setState({ spinning: false }), 700); },
+      spinAnim: spinning ? 'ta-spin .7s linear' : 'none',
+      toggleDl: () => this.setState(s => ({ dlOpen: !s.dlOpen })), dlOpen,
+      csvCurrent: () => this.csv(cur),
+      query, bulkOpen, empty: list.length === 0 && !!q,
+      sortArrow: sortDesc === false ? '▲' : '▼',
+      allChecked, bulkDisabled: selIds.length === 0,
+      bulkBg: selIds.length ? '#fff' : '#f1f3f4', bulkColor: selIds.length ? '#111925' : '#858c95',
+      stop: e => e.stopPropagation(),
+      closeMenus: () => (menu || bulkOpen || dlOpen || this.state.changesOpen) && this.setState({ menu: null, bulkOpen: false, dlOpen: false, changesOpen: false }),
+      onQuery: e => this.setState({ query: e.target.value }),
+      toggleSort: () => this.setState(s => ({ sortDesc: !s.sortDesc })),
+      toggleAll: () => this.setState({ selected: allChecked ? {} : Object.fromEntries(list.map(r => [r.id, true])) }),
+      toggleBulk: () => this.setState(s => ({ bulkOpen: !s.bulkOpen, menu: null })),
+      bulkRefresh: () => this.refresh(selIds), bulkDelete: () => this.remove(selIds),
+      rows: list.map(r => ({
+        ...r, refreshed: this.fmtDate(r.refreshed), checked: !!selected[r.id],
+        cbOpacity: selected[r.id] || selIds.length ? 1 : 0,
+        bg: selected[r.id] ? '#dfeffd' : '#fff',
+        menuOpen: menu === r.id,
+        kebabBg: menu === r.id ? '#1e4a93' : 'transparent', kebabFg: menu === r.id ? '#fff' : '#111925',
+        toggle: () => this.setState(s => ({ selected: { ...s.selected, [r.id]: !s.selected[r.id] } })),
+        toggleMenu: () => this.setState(s => ({ menu: s.menu === r.id ? null : r.id, bulkOpen: false })),
+        open: e => { e && e.stopPropagation(); this.go(r.id); },
+        edit: e => { e && e.stopPropagation(); this.go(r.id, true); },
+        refresh: () => this.refresh([r.id]), csv: () => this.csv(r), remove: () => this.remove([r.id]),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>
